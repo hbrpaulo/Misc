@@ -33,7 +33,7 @@ ui <- fluidPage(
     mainPanel = mainPanel(
       
       # Output: Data file ----
-      tableOutput("contents")
+      DT::DTOutput("contents")
       
     )
   )
