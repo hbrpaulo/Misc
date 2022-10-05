@@ -13,7 +13,7 @@ ui <- fluidPage(
     sidebarPanel(
       
       # Input: Select a file ----
-      fileInput("file1", "Choose CSV File",
+      fileInput("file1", "Choose XLSX File",
                 multiple = FALSE,
                 accept = c("text/csv",
                            "text/comma-separated-values,text/plain",
