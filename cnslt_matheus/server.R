@@ -1,6 +1,6 @@
 server <- function(input, output) {
   
-  output$contents <- renderDataTable({
+  output$contents <- DT::renderDT({
     
     # input$file1 will be NULL initially. After the user selects
     # and uploads a file, head of that data file by default,
@@ -23,3 +23,4 @@ server <- function(input, output) {
   })
   
 }
+
