@@ -3,8 +3,7 @@ server <- function(input, output) {
   output$contents <- DT::renderDT({
     
     # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
+    # and uploads a file
     
     req(input$file1)
     
@@ -18,7 +17,7 @@ server <- function(input, output) {
       }
     )
     
-    return(DT::datatable(df))
+    return(DT::datatable(df[, c(3, 4, 34)]))
     
   })
   
