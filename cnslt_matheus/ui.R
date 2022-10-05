@@ -13,11 +13,7 @@ ui <- fluidPage(
     sidebarPanel(
       
       # Input: Select a file ----
-      fileInput("file1", "Choose XLSX File",
-                multiple = FALSE,
-                accept = c("text/csv",
-                           "text/comma-separated-values,text/plain",
-                           ".csv")),
+      fileInput("file1", "Choose XLSX File"),
       
       # Horizontal line ----
       tags$hr(),
