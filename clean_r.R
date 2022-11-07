@@ -5,7 +5,9 @@ try(
 cat('\f') # Clean console
 
 # Remove all variable, except the ones listed in a variable called "fixed_data"
-rm(list = ls()[!ls() %in% c(fixed_data, "fixed_data")])
+if(exists('fixed_data')){
+  rm(list = ls()[!ls() %in% c(fixed_data, "fixed_data")])
+}else{rm(list = ls())}
 
 gc() # Free unused memory
 
