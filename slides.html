@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Prova II - Simulação Estatística</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ribeiro, H B P" />
+    <meta name="date" content="2022-11-08" />
+    <script src="libs/header-attrs-2.17/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <script src="libs/mark.js-8.11.1/mark.min.js"></script>
+    <link href="libs/xaringanExtra-search-0.0.1/search.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-search-0.0.1/search.js"></script>
+    <script>window.addEventListener('load', function() { window.xeSearch = new RemarkSearch({"position":"bottom-left","caseSensitive":false,"showIcon":false,"autoSearch":true}) })</script>
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Prova II - Simulação Estatística
+]
+.subtitle[
+## Análise de Sobrevivência - Metropolis Hasting
+]
+.author[
+### Ribeiro, H B P
+]
+.institute[
+### PIPGes, UFSCar/USP
+]
+.date[
+### 2022-11-08
+]
+
+---
+
+
+
+
+&lt;style&gt;
+body {
+text-align: justify}
+&lt;/style&gt;
+
+# Recordar
+
+## Metodologias utilizadas
+
+--
+
+### - Análise de Sobrevivência
+### - MCMC
+### - Metropolis-Hasting
+
+---
+background-image: url("https://openclipart.org/image/800px/300895")
+background-size: cover
+class: inverse
+
+# Análise de sobrevicência Análise de Confiabilidade
+
+---
+# Características da área
+
+- Pergunta de interesse
+- Variável de interesse
+  - Tempo de falha
+
+
+### Exemplos
+
+- O tempo até o óbito do paciente;
+
+- O tempo até o cliente ficar inadimplente
+
+- O tempo até o diagnóstico de uma doença;
+
+- O tempo até a reincidência criminal;
+
+- O tempo até uma motor queimar;
+
+
+---
+## Áreas comuns de aplicação
+
+- Área médica;
+
+- Pesquisa industrial;
+
+- Área financeira;
+
+- Área educacional
+
+--
+
+- &lt;font size="72"&gt; ... &lt;/font&gt; 
+- &lt;font size="72"&gt; ... &lt;/font&gt; 
+- &lt;font size="72"&gt; ... &lt;/font&gt; 
+
+---
+## Censura | O que é censura?
+
+&lt;!-- Material Eder Milani --&gt;
+
+- *Censura Tipo I:* ocorrem naqueles estudos que ao serem finalizados após um período pré-estabelecido de tempo registram, em seu término, alguns indivíduos que ainda não apresentaram o evento de interesse.
+
+- *Censura Tipo II:* resultam de estudos os quais são finalizados após a ocorrência do
+evento de interesse em um número pré-estabelecido de indivíduos.
+
+- *Censura do tipo aleatória:* é quando um paciente é retirado no decorrer do estudo sem ter ocorrido a falha, ou também, por exemplo, se o paciente morrer por uma razão diferente da estudada.
+
+---
+background-image: url("img/censura")
+background-size: cover
+## Censura | Tipos de censura
+
+
+
+![](img/censura.png){width=60%}
+
+
+
+---
+class: middle, inverse
+# Markov Chain Monte Carlo (MCMC)
+
+---
+### Cadeia de Markov
+
+- Transições entre estados onde, o próximo posterior depende somente do estado atual
+- Propriedade Markoviana: `\(P(X_{n+1}|X_1, \ldots, X_n) = P(X_{n+1}|X_n)\)`
+
+![](https://www.researchgate.net/profile/Behnam-Khaleghi/publication/335258089/figure/fig1/AS:793815497592832@1566271771892/Example-of-Markov-chain-for-workload-prediction.png)
+
+---
+# Metropolis-Hasting I
+
+### Cadeia de Markov
+- Irredutível
+- Aperiódica
+- &lt;s&gt;Reversível&lt;/s&gt;
+
+### Métodos de Monte Carlo
+
+Os métodos de Monte Carlo são uma ampla classe de algoritmos computacionais que dependem de amostragem aleatória repetida para obter resultados numéricos. O conceito subjacente é usar a aleatoriedade para resolver problemas que podem ser determinísticos em princípio.
+
+---
+# Metropolis-Hasting II
+
+1. Inicialize `\(x_0 = s_i\)` , sendo `\(s_i\)` um estado qualquer da cadeia de Markov com probabilidade positiva e `\(Q\)` uma matriz de transição simétrica que esteja associada a uma cadeia irredutível. Para `\(t = 1, 2, \ldots\)`;
+
+2. Simule um valor `\(x_{prop} = s_j\)` da distribuição `\(Q = \{q_{ij}\}\)`, um valor candidato à transição;
+
+3. Calcule a probabilidade de aceitar `\(x_{prop}\)` como `\(\alpha(i, j) = \text{min}\left(1, \frac{\pi_i}{\pi_j} \right)\)`;
+
+4. Simule `\(u \sim  \text{Uniforme}(0,1)\)` e, se `\(u &lt; \alpha(i, j)\)`, `\(x_t = x_{prop}\)` ou, caso
+contrário, `\(x_t = x_{t−1}\)`;
+
+5. Repita os passos 2 a 4 até atingir convergência e simular o número de valores desejado.
+
+---
+class: middle, inverse, center
+# Código R
+---
+
+
+```r
+*MH &lt;- function(sims, tempo, censura, desvio, theta) {
+  p &lt;- length(theta)+1
+  cadeia &lt;- matrix(rnorm(sims*p, sd = desvio), sims, p)
+  colnames(cadeia) &lt;- c(paste0('Parametro', 1:(p-1)), 'LogPos')
+  logp &lt;- posteriori_log(t, d, theta) # Posteriori
+  
+  for(i in 2:sims) {
+    # Novos valores propostos
+    sig &lt;- (2.38^2)/length(theta) * cov(cadeia[1:i,-p]) + 
+                            diag(rep(desvio, length(theta)))
+    theta_prop &lt;- mvtnorm::rmvnorm(1, mean = theta,
+                                   sigma = sig)
+    logp_prop &lt;- posteriori_log(t, d, theta_prop)
+    alpha &lt;- min(1, logp_prop - logp)
+    
+    # Teste para aceita ou não os novos valores
+    if (log(runif(1)) &lt; alpha){
+      theta &lt;- theta_prop; logp &lt;- logp_prop 
+    }
+    cadeia[i, ] &lt;- c(theta, logp) # Salvar os valores
+   cat(round(i/sims*100, 2))
+   cat('\r')
+  }
+  cadeia[,-p] &lt;- exp(cadeia[,-p])
+  return(data.frame(cadeia))
+}
+```
+
+---
+# Metropolis-Hasting
+
+## Passo 1.
+
+
+```r
+*MH &lt;- function(sims, tempo, censura, desvio, theta) {
+  p &lt;- length(theta)+1
+  cadeia &lt;- matrix(rnorm(sims*p, sd = desvio), sims, p)
+* colnames(cadeia) &lt;- c(paste0('Parametro', 1:(p-1)), 'LogPos')
+  logp &lt;- posteriori_log(t, d, theta) # Posteriori
+  ...
+```
+
+---
+# Metropolis-Hasting
+
+## Passo 1..
+
+
+```r
+*MH &lt;- function(sims, tempo, censura, desvio, theta) {
+* p &lt;- length(theta)+1
+  cadeia &lt;- matrix(rnorm(sims*p, sd = desvio), sims, p)
+  colnames(cadeia) &lt;- c(paste0('Parametro', 1:(p-1)), 'LogPos')
+  logp &lt;- posteriori_log(t, d, theta) # Posteriori
+  ...
+```
+
+---
+# Metropolis-Hasting
+
+## Passo 1...
+
+
+```r
+*MH &lt;- function(sims, tempo, censura, desvio, theta) {
+  p &lt;- length(theta)+1
+  cadeia &lt;- matrix(rnorm(sims*p, sd = desvio), sims, p)
+  colnames(cadeia) &lt;- c(paste0('Parametro', 1:(p-1)), 'LogPos')
+* logp &lt;- posteriori_log(t, d, theta) # Posteriori
+  ...
+```
+
+---
+# Metropolis-Hasting
+
+## Passo 2.
+
+### Independente
+
+`$$P(X_{t+1}|X_{t}=\omega) = P(X_{t+1})$$`
+
+
+```r
+theta &lt;- chute_inicial
+for(i in 1:sims){
+  theta_prop &lt;- rnorm(lenght(theta), 
+*                     mean = 0,
+                                 sigma = sig)
+  ...
+```
+
+---
+# Metropolis-Hasting
+
+## Passo 2..
+
+### Passeio aleatório
+
+`$$P(X_{t+1}=x_t |X_{t}=\omega)$$`
+
+
+```r
+for(i in 1:sims){
+  theta_prop &lt;- mvtnorm::rmvnorm(1, 
+*                                mean = theta,
+                                 sigma = sig)
+  ...
+* theta &lt;- theta_prop
+```
+
+---
+# Metropolis-Hasting
+
+## Passo 2...
+
+### Passeio aleatório adaptativo
+
+`$$X_{t+1}\sim \text{N}_d \left( x_t, \Sigma^{t} \right), \qquad \Sigma^{t}= \tfrac{2,38^2}{|\; \theta \; |}\text{Cov}\left( \{X\}_{t&gt;1} \right) + \textbf{I }\varepsilon^2$$`
+
+
+```r
+for(i in 2:sims){
+* sig &lt;- (2.38^2)/length(theta) * cov(cadeia[1:i,-p]) +
+*                               diag(rep(desvio, length(theta)))
+  theta_prop &lt;- mvtnorm::rmvnorm(1, 
+                                 mean = theta,
+*                                sigma = sig)
+  ...
+```
+
+
+
+---
+class:inverse
+# Aplicação a dados de Câncer
+
+&lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt;
+
+### Distribuição Gompertz
+
+---
+# Máxima verossimilhança
+
+`$$\ell(X|\theta)= \text{log[S(t})] = \sum\limits_{i=1}^n \delta_i \left[ -\frac{b}{a}(e^{at_i}-1) \right]$$`
+
+## Função de risco
+
+$$\text{log[h(t)]}= log(b) + at $$
+
+## Distribuição a priori
+
+`$$\pi(\theta) \sim \text{N} \left( 0, 100^2 \right)$$`
+
+# Distribuição a posteriori
+
+`$$p(\theta | X) \propto \pi(\theta) \cdot \text{L}(\theta|X)$$`
+
+---
+# Burn-in
+
+.pull-left[
+Antes de atingir a distribuição desejada a cadeia, dependendo em parte do chute inicial, pode percorrer um caminho longo antes de assumir valores convergentes. Portanto uma parte inicial da cadeia deve ser retirada para evitar esses erros.
+
+&gt; - Aceitação de `1-coda::rejectionRate(coda::as.mcmc(fit[,-3]))`
+]
+
+.pull-right[
+&lt;img src="slides_files/figure-html/unnamed-chunk-11-1.png" height="30%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Saltos
+
+
+.pull-left[
+A depender principalmente da variância entre as propostas, novas propostas podem demorar muito a serem aceita, e com isso ter muitos valores que se repetem, ou somente são aceitos valores muito próximos dos  atuais. Em ambos os casos, isso causaria uma autocorrelação muito alta.
+
+Por isso também é necessário fazer saltos na cadeia para quebrar essa estrutura de autocorrelação existente.]
+
+
+.pull-right[
+&lt;img src="slides_files/figure-html/unnamed-chunk-12-1.png" height="30%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Distribuição conjunta
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-13-1.png" height="30%" style="display: block; margin: auto;" /&gt;
+
+---
+# Convergência
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-14-1.png" height="30%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Distribuição dos parâmetros
+
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Parametro1 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Parametro2 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mínimo &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.4077 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 708.6577 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Média &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5502 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1239.9720 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mediana &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5502 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1239.9720 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Máximo &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.7309 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2616.5417 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Percentil.2.5% &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.4665 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 891.4585 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Percentil.97.5% &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.6377 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1765.6188 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Cadeia resultante
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-16-1.png" height="30%" style="display: block; margin: auto;" /&gt;
+
+---
+# Taxa de Sobrevivência
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-17-1.png" height="30%" style="display: block; margin: auto;" /&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
