@@ -13,4 +13,4 @@ try(invisible(lapply(paste0('package:', names(sessionInfo()$otherPkgs)), detach,
                      character.only=TRUE, unload=TRUE)), silent = TRUE) # Detach all packages
 gc() # Free unused memory
 
-rstudioapi::restartSession() # Detach all packages
+rstudioapi::restartSession()
