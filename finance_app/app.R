@@ -1,7 +1,7 @@
 # ui
-source('https://raw.githubusercontent.com/bgstieber/budget_shiny_app/master/ui.R')
+source('https://raw.githubusercontent.com/hbrpaulo/Misc/main/finance_app/ui.R')
 
 #server
-source('https://raw.githubusercontent.com/bgstieber/budget_shiny_app/master/server.R')
+source('https://raw.githubusercontent.com/hbrpaulo/Misc/main/finance_app/server.R')
 
 shinyApp(ui, server)
