@@ -1,11 +1,8 @@
 # ldens_va must be declare before running code like this:
-# ldens_va <- function(x, shape, scale)
-#   log( 
-#     shape * exp(scale*x) * exp(-(shape/scale)*(exp(scale*x)-1))
-#   )
+ldens_va <- function(x, shape=2, scale=3){log(shape * exp(scale*x) * exp(-(shape/scale)*(exp(scale*x)-1)))}
 # Modife into function later
 
-
+# Função para arredondar e formatar números
 num <- function(x){return(prettyNum(round(x, 3), big.mark = ".", decimal.mark = ","))}
 
 set.seed(47)
