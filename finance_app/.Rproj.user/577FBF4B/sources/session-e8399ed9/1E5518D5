@@ -3,7 +3,7 @@
     "path": "~/GitHub/Misc/finance_app/app.R",
     "project_path": "app.R",
     "type": "r_source",
-    "hash": "550707420",
+    "hash": "831600015",
     "contents": "",
     "dirty": false,
     "created": 1726709382149.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "7,0",
+        "cursorPosition": "5,1",
         "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1726712266,
+    "lastKnownWriteTime": 1726714893,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1726712266272,
+    "last_content_update": 1726714893275,
     "read_only": false,
     "read_only_alternatives": []
 }
