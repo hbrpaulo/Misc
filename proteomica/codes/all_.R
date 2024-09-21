@@ -1,6 +1,11 @@
 library(tidyverse)
 library(ggrepel)
 
+# Codigo feito para a análise de proteínas de um dataset de câncer de bexiga
+# Construção de um vulcano plot para cada proteína e categoria
+# no objetivo de identificar proteínas hiper e hipo-representativas
+# com seus respectivos p-values e FDRs
+
 used_prot <- all_prot
 used_cat <- cat_col
 pvalies_all <- data.frame();cont <- 0;time1 <- Sys.time()
