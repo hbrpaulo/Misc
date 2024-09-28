@@ -1,4 +1,4 @@
-⛔ Média Móvel da distância entre curva e a referência [Talvez não seja necessario]
+-   ⛔ Média Móvel da distância entre curva e a referência
 
 -   Verificar tendências no total e no separado
 
@@ -10,8 +10,14 @@
 
     -   Análogo a gestão de qualidade
 
-    \##### Feedback prof Oilson:
+    #### Feedback prof Oilson:
 
     -   Adicionar testes de aderência
 
         -   Generalizar para quaisquer comparação de quaisquer curvas
+
+    ⛔ Talvez não seja necessario
+
+    ✅ Feito
+
+    🛠️ Fazendo
