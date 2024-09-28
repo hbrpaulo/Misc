@@ -1,11 +1,4 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
--   ⛔ Média Móvel da distância entre curva e a referência [Talvez não
-    seja necessario]
+⛔ Média Móvel da distância entre curva e a referência [Talvez não seja necessario]
 
 -   Verificar tendências no total e no separado
 
