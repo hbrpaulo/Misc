@@ -1,4 +1,4 @@
-*projeto nos primeiros estágios de desenvolvimento*
+**[projeto nos primeiros estágios de desenvolvimento]**
 
 # CurveInterpreter
 
@@ -18,7 +18,7 @@ O projeto atualmente suporta a análise de três tipos principais de curvas:
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seuusuario/CurveInterpreter.git
+git clone https://github.com/hbrp/Misc/CurveInterpreter.git
 ```
 
 Encorajamos contribuições! Se você tem sugestões de melhorias, novas funcionalidades ou quer corrigir bugs, sinta-se à vontade para abrir uma pull request ou issue.
@@ -30,5 +30,3 @@ Encorajamos contribuições! Se você tem sugestões de melhorias, novas funcion
 - **Licença**: free source
 - **Autores e Agradecimentos**: Paulo H. B. Ribeiro
 - **Agradecimentos**: Prof Dr Oilson Gonzatto
-
-Este esboço é apenas um ponto de partida. Você pode ajustar o conteúdo para se alinhar melhor com as especificidades do seu projeto e para fornecer informações adicionais que você acha que seriam úteis para os usuários. Se precisar de ajuda para elaborar outras partes do projeto ou tiver dúvidas específicas, estou à disposição!
