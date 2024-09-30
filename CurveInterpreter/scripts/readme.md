@@ -16,6 +16,8 @@
 
         -   Generalizar para quaisquer comparação de quaisquer curvas
 
+    \-\--
+
     ⛔ Talvez não seja necessario
 
     ✅ Feito
