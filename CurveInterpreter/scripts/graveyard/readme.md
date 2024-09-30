@@ -1,0 +1,1 @@
+Arquivos de códigos que, apesar de que possam ter sido aproveitados noutros momentos, por diferentes motivos foram descontinuados. 
