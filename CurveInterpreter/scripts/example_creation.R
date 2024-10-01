@@ -8,9 +8,7 @@ func <- function(seed = NULL, divisor = .2, n = 100, plot = FALSE){
                     ref = sort(rnorm(n, 1, .1), decreasing = TRUE),
                     res = sort(rnorm(n, 1, .2), decreasing = TRUE),
                     ref_sup = ref * (1+var),
-                    ref_inf = ref * (1-var)) %>% rowwise %>% 
-    mutate(out_sup = res>ref_sup,
-           out_inf = res>ref_inf) %>% ungroup
+                    ref_inf = ref * (1-var)) %>% ungroup
   
   output$diffs1 = output$ref - output$res
   output$diffsa = abs(output$diffs1)
@@ -37,8 +35,6 @@ func <- function(seed = NULL, divisor = .2, n = 100, plot = FALSE){
   }
   return(output)
 }
-#resi_cs <- func(seed = 100, divisor = .1, n = 200)
-
 
 #resi_cs <- lapply(as.list(100), func, divisor = .2)[[1]]
 # tipos de exemplos:

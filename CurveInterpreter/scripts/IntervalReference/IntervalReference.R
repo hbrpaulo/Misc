@@ -1,10 +1,16 @@
 rm(list = ls())
-library(tidyverse)
+library(zoo)
 library(tibble)
+library(tidyverse)
 theme_set(theme_classic())
 
 source('scripts/example_creation.R')
-resi_cs <- func(seed = 100, divisor = .2, n = 200);rm(func)
+resi_cs <- func(seed = 100, divisor = .2, n = 200) %>%
+  mutate(out_sup = ifelse(res<ref_sup, 'inside', 'outside'),
+         out_inf = ifelse(res>ref_inf, 'inside', 'outside'),
+         out = ifelse(out_sup=='outside'|out_inf=='outside', 'outside', 'inside'))
+resi_cs
+rm(func)
 
 # atual ----
 
@@ -21,7 +27,6 @@ ggplot(data = resi_cs, aes(x = x, y = res)) +
   geom_vline(xintercept = attr(resi_cs, 'beginning'), linetype = 'dashed') +
   geom_vline(xintercept = attr(resi_cs, 'end'), linetype = 'dashed')# + facet_wrap(~part, scales = 'fixed')
 
-plot(resi_cs$diffs1, type = 'l')
 # tendencia total
 aTSA::trend.test(resi_cs$diffs2)
 # tendencia separada
@@ -29,15 +34,7 @@ aTSA::trend.test(resi_cs[which(resi_cs$part=='beginning'),]$diffs2)$p.value
 aTSA::trend.test(resi_cs[which(resi_cs$part=='middle'),]$diffs2)$p.value
 aTSA::trend.test(resi_cs[which(resi_cs$part=='end'),]$diffs2)$p.value
 
-microbenchmark::microbenchmark(
-  tidyv = {resi_cs %>% 
-      group_by(part) %>% 
-      summarise(pvalue = aTSA::trend.test(diffs2)$p.value)},
-  baseR = {aTSA::trend.test(resi_cs[which(resi_cs$part=='beginning'),]$diffs2)$p.value
-  aTSA::trend.test(resi_cs[which(resi_cs$part=='middle'),]$diffs2)$p.value
-  aTSA::trend.test(resi_cs[which(resi_cs$part=='end'),]$diffs2)$p.value},
-  datatable = {data.table(resi_cs)[, .(pvalue = aTSA::trend.test(diffs2)$p.value),
-                       by = .(part)]},
-  times = 100
-  ) %>% autoplot()
-
+# count the sum and how many consecutive TRUES in resi_cs$out
+sum(resi_cs$out == 'outside')
+sprintf('%.4f%%', sum(resi_cs$out == 'outside')/nrow(resi_cs)*100)
+rle(resi_cs$out)
