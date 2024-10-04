@@ -1,16 +1,27 @@
 
 # Lógica do servidor
 server <- function(input, output, session) {
-  # Carregar CSV
+  
+  default_data <- reactive({
+    url <- "https://raw.githubusercontent.com/hbrpaulo/Misc/refs/heads/main/CurveInterpreter/CurveIntDemo/example_data.csv"
+    read.csv(url)
+  })
+  
+  # Carregar o arquivo ou usar o dataset padrão
   data <- reactive({
-    req(input$file)
-    read.csv(input$file$datapath)
+    if (is.null(input$file)) {
+      # Se o arquivo não foi carregado, use o dataset padrão
+      default_data()
+    } else {
+      # Caso contrário, use o arquivo carregado
+      read.csv(input$file$datapath)
+    }
   })
   
   # Criar seletor de colunas para 'res'
-  output$res_column <- renderUI({
+  output$curve_column <- renderUI({
     req(data())
-    selectInput("res", "Selecione a coluna res:", choices = names(data()), selected = names(data())[1])
+    selectInput("res", "Selecione a coluna da curva:", choices = names(data()), selected = names(data())[1])
   })
   
   # Criar seletor de colunas para 'ref' (mostrado se optionA for TRUE)

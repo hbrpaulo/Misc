@@ -11,10 +11,10 @@ ui <- fluidPage(
       fileInput("file", "Carregue o arquivo CSV", accept = ".csv"),
       
       # Selecionar a variável 'res' obrigatoriamente
-      uiOutput("res_column"),
+      uiOutput("curve_column"),
       
       # Opção A: Condicional de seleção da variável 'ref'
-      checkboxInput("optionA", "Selecionar uma coluna ref?", FALSE),
+      checkboxInput("optionA", "Selecionar a coluna referência?", FALSE),
       uiOutput("ref_column"),
       
       # Opção B: Se Opção A for selecionada, escolher opcionalmente ref_sup e ref_inf
