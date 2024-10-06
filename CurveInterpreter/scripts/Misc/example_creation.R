@@ -35,7 +35,7 @@ func <- function(seed = NULL, divisor = .2, n = 100, plot = FALSE){
   }
   return(output)
 }
-
+resi_cs <- func()
 #resi_cs <- lapply(as.list(100), func, divisor = .2)[[1]]
 # tipos de exemplos:
 #                    100 ok
