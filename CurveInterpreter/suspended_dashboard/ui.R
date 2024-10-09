@@ -1,13 +1,11 @@
 {library(zoo)
 library(shiny)
 library(bslib)
-library(tibble)
-library(ggplot2)
 library(tidyverse)
 library(DiagrammeR)}
 
 # Interface do usuário
-ui <- page_fluid(title = 'v0.1 CurveInterpreter',
+ui <- page_fluid(title = 'v0.2 CurveInterpreter',
                  navset_tab(
                    nav_panel("Referência intervalar",
                              fluidPage(
