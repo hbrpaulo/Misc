@@ -10,6 +10,12 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{css, echo = FALSE}
+.section {
+  opacity: 100;
+}
+```
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
@@ -21,7 +27,6 @@ knitr::opts_chunk$set(echo = TRUE,
 ```{r}
 library(tidyverse)
 library(DiagrammeR)
-
 ```
 
 ## Cronograma
@@ -33,6 +38,8 @@ source('scripts/Misc/diagrama.R')
 ```{r example}
 alpha <- .5
 results <- list()
+theme_set(theme_classic())
+
 source('scripts/Misc/example_creation.R')
 ```
 
