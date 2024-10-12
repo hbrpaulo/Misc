@@ -1,19 +1,24 @@
-# Função para calcular a direção e p-valor da tendência
-tendencia_direcao_pvalue <- function(x){
-  aux <- aTSA::trend.test(x)
-  return(list(pvalue = aux$p.value,
-              direcao = ifelse(aux$alternative == 'data have a decreasing trend',
-                               'decrescente',
-                               'crescente')))
+# Function to calculate the trend direction and p-value
+trend_direction_pvalue <- function(x) {
+  aux <- aTSA::trend.test(x)  # Perform trend test
+  return(list(
+    pvalue = aux$p.value,  # Extract p-value
+    direction = ifelse(aux$alternative == 'data have a decreasing trend', 
+                       'decreasing', 
+                       'increasing')  # Determine trend direction
+  ))
 }
 
-# Trend metrics
+# Trend metrics calculations
+results$metrics$trend$global <- trend_direction_pvalue(database$data_series)  # Overall trend for the entire series
+results$metrics$trend$begin <- trend_direction_pvalue(database[database$part == 'beginning', ]$data_series)  # Trend for the beginning part
+results$metrics$trend$middle <- trend_direction_pvalue(database[database$part == 'middle', ]$data_series)  # Trend for the middle part
+results$metrics$trend$end <- trend_direction_pvalue(database[database$part == 'end', ]$data_series)  # Trend for the end part
 
-results$metrics$trend$global <- tendencia_direcao_pvalue(database$diffs1)
-results$metrics$trend$begin <- tendencia_direcao_pvalue(database[which(database$part == 'beginning'), ]$diffs1)
-results$metrics$trend$middle <- tendencia_direcao_pvalue(database[which(database$part == 'middle'), ]$diffs1)
-results$metrics$trend$end <- tendencia_direcao_pvalue(database[which(database$part == 'end'), ]$diffs1)
-
-plot(stl(ts(database$diffs1, frequency = 10), s.window = 'periodic')[["time.series"]][,2],
-     main = str_wrap('Grafico de Decomposicao Tendencia', width = 35),
-     xlab = 'Tempo', ylab = 'Tendencia')
+# Plot the trend decomposition using STL (Seasonal-Trend decomposition using Loess)
+plot(
+  stl(ts(database$data_series, frequency = 10), s.window = 'periodic')[["time.series"]][, 2],
+  main = str_wrap('Trend Decomposition', width = 35),  # Title for the plot
+  xlab = 'Observations',  # X-axis label
+  ylab = 'Trend'  # Y-axis label
+)

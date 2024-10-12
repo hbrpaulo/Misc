@@ -1,108 +1,121 @@
-#source('ui.R');source('server.R')
-#library(shiny)
-#shinyApp(ui, server)
-#try(dev.off(), silent = TRUE)
-#rm(list = ls())
-
-
-
-# Season metrics
-# library(seastests)
-
-# Create a ts cyclical database in case it doesn't exist
-if(!exists('database')){
-  # testing subject 1
-  # one series with cycle 'm', 'n' observation in each cycle (frequency)
-  n <- 20
-  m <- 30
-  print('ihuuuuuuul')
-  database <- tibble(res = numeric(n*m))
+# Create a cyclical series database if it doesn't exist
+if (!exists("database")) {
+  # Parameters for the series
+  n <- 20  # Number of observations per cycle
+  m <- 30  # Number of cycles
   
-  database$res <-
-    sapply(1:m, 
-           FUN = function(x){
-             seasonality <- (1:n)/2
-             runif(n, 0, n/5)+seasonality}
-    ) %>% as.vector
-  par(mfrow = c(1, 2))
-  # global vision
-  database$res %>% as.vector() %>% ts.plot
-  # cycle vision
-  matrix(database$res, ncol = m, byrow = T) %>%  ts.plot
-  par(mfrow = c(1, 1))
-}  
-par(mfrow = c(1, 2))
-
-# Find the possibility of seasonality which minimize of var between the cycles
-seasonality_finder <- function(x, freq) {
-  x <- as.vector(x)
-  aux <- matrix(x, ncol = freq, byrow = T)
-  vars <- apply(aux, 2, var)
-  return(mean(vars))
+  # Initialize the database
+  database <- tibble(data_series = numeric(n * m))
+  
+  # Generate the seasonal data series
+  database$data_series <-
+    sapply(
+      1:m,
+      FUN = function(x) {
+        seasonality <- (1:n) / 2  # Create a seasonal pattern
+        runif(n, 0, n / 5) + seasonality  # Add random noise to the seasonal pattern
+      }
+    ) %>% as.vector()
 }
 
-# Data.frame frequency and variance between cycles
-n_min <- 7 # to pick cycle which has at least 7 elements in each
-aux <- tibble(freq = n_min:(length(database$res)/3),
-              variance_between_cycles = sapply(
-                X = n_min:(length(database$res)/3),
-                FUN = function(x) {
-                  seasonality_finder(database$res, freq = x)
-                }
-              ))
+# Function to find the variance between cycles for a given frequency
+seasonality_finder <- function(x, freq) {
+  x <- as.vector(x)
+  aux <-
+    matrix(x, ncol = freq, byrow = TRUE)  # Reshape data into cycles
+  vars <-
+    apply(aux, 2, var)  # Calculate variance for each cycle's iteration
+  return(mean(vars))  # Return the average variance across cycles
+}
 
+# Create a data frame to store frequencies and their corresponding variances
+n_min <- 7  # Minimum number of elements in each cycle to consider
+aux <- tibble(
+  freq = n_min:(length(database$data_series) / 3),
+  # Frequency range
+  variance_between_cycles = sapply(
+    n_min:(length(database$data_series) / 3),
+    FUN = function(f) {
+      seasonality_finder(database$data_series, freq = f)  # Calculate variance for each frequency
+    }
+  )
+)
+
+# Apply k-means clustering to group frequencies based on variance
 divide_groups <- kmeans(aux$variance_between_cycles, centers = 2)
 aux$group <- divide_groups$cluster
 
-plot(aux$freq, aux$variance_between_cycles, type = 'o', col = aux$group, pch = 19,
-     main = str_wrap('Variance between cycles for each frequency', width = 35))
+# Plot the variance against frequencies, color-coded by group
+plot(
+  aux$freq,
+  xlab = 'Frequency',
+  aux$variance_between_cycles,
+  ylab = "Within Variance",
+  type = "l",
+  main = str_wrap("Variance Between Cycles for Each Frequency", width = 35)
+)
+points(
+  x = aux$freq,
+  y = aux$variance_between_cycles,
+  col = aux$group,
+  pch = 19
+)
 
-# Using k-means to divide the frequencies in two groups
-# [which.min(divide_groups$centers)] is the group with the lowest variance between cycles
-# luckily, filtering the group with the lowest variance between cycles will
-# and to safe computacional power by not testing frequencies that wouldn't make sense
-
-season_possibilities <- aux[which(aux$group == which.min(divide_groups$centers)),] %>% 
+# Identify the group with the lowest variance
+season_possibilities <-
+  aux[aux$group == which.min(divide_groups$centers),] %>%
   arrange(variance_between_cycles) %>%
-  slice(1:5) %>% # to pick at most the five lowest variances
-  select(-group) %>% 
-  mutate(Test = 'KW-R')
+  slice(1:5) %>%  # Select the five lowest variances
+  select(-group) %>%
+  mutate(Test = "KW-R")  # Specify the test used
 
-# Saving pvalue from seasonality tests 'KW-R' for each frequency
-season_possibilities$pvalue = NA
-j = 1
-for(i in season_possibilities$freq){
-  season_possibilities$pvalue[j] = seastests::combined_test(ts(database$res, frequency = i), freq = i)$Pval["KW-R p-value"]
-  j = j + 1
+# Saving p-values from seasonality tests for each frequency
+season_possibilities$pvalue <- NA
+
+j <- 1
+for (i in season_possibilities$freq) {
+  season_possibilities$pvalue[j] <-
+    seastests::combined_test(ts(database$data_series,
+                                frequency = i), freq = i)$Pval["KW-R p-value"]
+  j <- j + 1
 }
 
-# Finding possible frequencies of seasonality, which are multiple of one another
-
+# Find combinations of frequencies that are multiples of one another
 season_combinations <- t(combn(season_possibilities$freq, 2))
-colnames(season_combinations)[1:2] <- c('freq1', 'freq2')
-season_combinations <- data.frame(season_combinations,
-                                  has_equivalence = apply(FUN = function(x){
-                                    y = x[1]/x[2]
-                                    if(y == floor(y)){
-                                      return(TRUE)
-                                    } else {
-                                      return(FALSE)
-                                    }},
-                                    MARGIN = 1, X = season_combinations)) %>% 
-  filter(has_equivalence==TRUE) %>% 
-  janitor::clean_names()
+colnames(season_combinations)[1:2] <- c("freq1", "freq2")
+season_combinations <- data.frame(
+  season_combinations,
+  has_equivalence = apply(
+    FUN = function(x) {
+      ratio <- x[1] / x[2]
+      return(ceiling(ratio) == floor(ratio))  # Check if freq1 is a multiple of freq2
+    },
+    MARGIN = 1,
+    X = season_combinations
+  )
+) %>%
+  filter(has_equivalence == TRUE) %>%
+  janitor::clean_names()  # Clean column names
 
-# Adding the seasonality test results to the season_possibilities data.frame
-season_possibilities$has_equivalence <- season_possibilities$freq %in% c(season_combinations$freq1, season_combinations$freq2)
+# Add equivalence results to the season_possibilities data frame
+season_possibilities$has_equivalence <-
+  season_possibilities$freq %in% c(season_combinations$freq1, season_combinations$freq2)
 
-# Plotting the pvalue of the seasonality test for each frequency
-#if(interactive()){
-plot(x = 7:(length(database$res)/3),
-     y = sapply(7:(length(database$res)/3), function(x){
-       seastests::kw(ts(database$res, frequency = x), freq = x)$Pval
-     }), type = 'o', pch = 19, ylab = 'pvalue',
-     main = str_wrap('P-value of the seasonality test KW for each frequency', width = 35)
-     
+# Plot the p-values of the seasonality test for each frequency
+plot(
+  x = 7:(length(database$data_series) / 3),
+  y = sapply(7:(length(
+    database$data_series
+  ) / 3),
+  function(f) {
+    seastests::kw(ts(database$data_series,
+                     frequency = f), freq = f)$Pval
+  }),
+  type = "o",
+  pch = 19,
+  ylab = "P-value",
+  xlab = 'Frequency',
+  main = str_wrap("P-value of the Seasonality Test KW for Each Frequency", width = 35)
 )
-#}
-par(mfrow = c(1, 1))
+
+par(mfrow = c(1, 1))  # Reset plotting parameters

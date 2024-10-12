@@ -1,60 +1,63 @@
 ---
-title: "Untitled"
+title: "CurveInterpreter"
 output: 
   html_document: 
     toc: yes
-    theme: paper
     number_sections: yes
+    toc_depth: 4
+    theme: cerulean
 date: "`r Sys.Date()`"
 editor_options: 
   chunk_output_type: console
 ---
 
-```{css, echo = FALSE}
-.section {
-  opacity: 100;
-}
-```
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
-                      message = FALSE)
+                      message = FALSE,
+                      knitr.svg.object = TRUE, 
+                      out.width='60%',
+                      fig.align = 'center')
 ```
 
-# CurveInterpreter {.tabset .tabset-fade .tabset-pills}
-
-```{r}
+```{r, echo = FALSE}
 library(tidyverse)
 library(DiagrammeR)
-```
-
-## Cronograma
-
-```{r cronograma}
-source('scripts/Misc/diagrama.R')
-```
-
-```{r example}
+#plot(x)
 alpha <- .5
 results <- list()
 theme_set(theme_classic())
-
-source('scripts/Misc/example_creation.R')
 ```
+
+# Estrutura
 
 <details>
   <summary>Click to See</summary>
-```{r}
+```{r cronograma}
+source('scripts/Misc/diagrama.R')
+htmltools::includeHTML("output/diagram.html")
+```
+</details>
+
+# Análise para curva sem referência
+<!-- {.tabset .tabset-fade .tabset-pills} -->
+
+<details>
+  <summary>Click to See</summary>
+```{r example}
+source('scripts/Misc/example_creation.R')
 source('scripts/IntervalMainPlot.R')
 ```
 </details>
 
+<!-- ![]("output/graph.svg") -->
+
 ## Tendências
 
 ### Gráficos
+
 <details>
-  <summary>Click to See</summary>
+  <summary>Click to see the plots</summary>
 ```{r tests}
 source('scripts/tests/trends_test.R')
 ```
@@ -68,13 +71,25 @@ source('scripts/interpretations/trends_interpretations.R')
 
 ### Gráficos
 
-<details>
-  <summary>Click to See</summary>
+<!-- <details> -->
+<!--   <summary>Click to See</summary> -->
 ```{r}
+par(mfrow = c(1, 2))
 source('scripts/tests/seasonalities_test.R')
 ```
-</details> 
+<!-- </details>  -->
 
 ```{r interpretation_seasonnalities, results='asis'}
 source('scripts/interpretations/seasonalities_interpretations.R')
 ```
+
+<!-- importacao condicional de rmds -->
+<!-- ```{r} -->
+<!-- x <- mean(rnorm(100)) -->
+
+<!-- if(x<0){ -->
+<!--   cat(knitr::asis_output(knitr::knit_child("child01.Rmd", quiet=TRUE, envir=environment()))) -->
+<!-- }else{ -->
+<!--   cat(knitr::asis_output(knitr::knit_child("child02.Rmd", quiet=TRUE, envir=environment()))) -->
+<!-- } -->
+<!-- ``` -->

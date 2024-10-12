@@ -1,9 +1,6 @@
 mermaid('graph TD
 
-    Begin[CurveInterpret] --> Frag{Fragmentação<br>  da curva}
-    Frag --> RefDummy{Há referência?}
-
-    RefDummy --> AnInd(Sem<br>referência)
+    RefDummy(Há referência?) --> AnInd(Sem<br>referência)
     AnInd --> NoRef(Análise<br>individual)
     RefDummy --> Ref(Com<br>referência)
 
@@ -36,9 +33,22 @@ mermaid('graph TD
       Saz2 --> SazG2(Sazonalidade<br>global)
       Saz2 --> SazF2(Sazonalidade<br>frag.)
       
+      %% Aspectos específicos
+      RefPont --> Dist(Distância entre<br>curva e a referência)
+      
+      RefInt --> Dist1(Distância entre<br>curva e a referência)
+      RefInt --> Outsiders(Pontos fora<br>do intervalor)
+      Outsiders --> Count(Contagem<br>Porcentagem)
+      Outsiders --> Seq(Sequenciais)
+      
+      %% Aesthetics 
       style SazG fill:#2BD72F
       style SazG1 fill:#2BD72F
       style SazG2 fill:#2BD72F
+      
+      style SazF fill:#EEA35D
+      style SazF1 fill:#EEA35D
+      style SazF2 fill:#EEA35D
       
       style TrendG fill:#2BD72F
       style TrendG1 fill:#2BD72F
@@ -52,7 +62,3 @@ mermaid('graph TD
       style Trend1 fill:#2BD72F
       style Trend2 fill:#EEA35D
 ') %>% print
-# %>%
-#   export_svg() %>%
-#   charToRaw %>% 
-#   rsvg_pdf("output/path_to_svg_file.svg")

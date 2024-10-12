@@ -8,14 +8,14 @@
 
 # comparing speed for different methods of running trend.test
 
-source('scripts/example_creation.R')
-resi_cs <- func(seed = 100, divisor = .2, n = 200);rm(func)
+source('scripts/Misc/example_creation.R')
+database <- func(seed = 100, divisor = .2, n = 200);rm(func)
 library(data.table)
 microbenchmark::microbenchmark(
-  tidyv = {resi_cs %>% group_by(part) %>% summarise(pvalue = aTSA::trend.test(diffs2)$p.value)},
-  baseR = {aTSA::trend.test(resi_cs[which(resi_cs$part=='beginning'),]$diffs2)$p.value
-    aTSA::trend.test(resi_cs[which(resi_cs$part=='middle'),]$diffs2)$p.value
-    aTSA::trend.test(resi_cs[which(resi_cs$part=='end'),]$diffs2)$p.value},
-  datatable = {data.table(resi_cs)[, .(pvalue = aTSA::trend.test(diffs2)$p.value),
+  tidyv = {database %>% group_by(part) %>% summarise(pvalue = aTSA::trend.test(squared_difference)$p.value)},
+  baseR = {aTSA::trend.test(database[which(database$part=='beginning'),]$squared_difference)$p.value
+    aTSA::trend.test(database[which(database$part=='middle'),]$squared_difference)$p.value
+    aTSA::trend.test(database[which(database$part=='end'),]$squared_difference)$p.value},
+  datatable = {data.table(database)[, .(pvalue = aTSA::trend.test(squared_difference)$p.value),
                                    by = .(part)]},
   times = 100) %>% autoplot()

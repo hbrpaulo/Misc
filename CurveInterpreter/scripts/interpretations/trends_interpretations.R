@@ -2,7 +2,7 @@
 
 # Print trend results
 
-cat('### Trends: Placeholder texts')
+cat('### Textos sobre Têndencias: Placeholder')
 
 results$indicators$trend$global <- paste('Tendência global:',
                                  if (results$metrics$trend$global$pvalue < alpha) {
