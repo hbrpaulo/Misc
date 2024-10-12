@@ -33,13 +33,13 @@ theme_set(theme_classic())
 
 <details>
   <summary>Click to See</summary>
-```{r cronograma}
+```{r cronograma, out.width='100%'}
 source('scripts/Misc/diagrama.R')
-htmltools::includeHTML("output/diagram.html")
+diagram
 ```
 </details>
 
-# Análise para curva sem referência
+# Análise para curva sem referência {.tabset .tabset-fade .tabset-pills}
 <!-- {.tabset .tabset-fade .tabset-pills} -->
 
 <details>
@@ -49,8 +49,6 @@ source('scripts/Misc/example_creation.R')
 source('scripts/IntervalMainPlot.R')
 ```
 </details>
-
-<!-- ![]("output/graph.svg") -->
 
 ## Tendências
 
