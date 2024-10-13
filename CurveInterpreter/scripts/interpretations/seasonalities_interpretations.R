@@ -1,12 +1,12 @@
 season_possibilities <- season_possibilities %>% 
   filter(has_equivalence)
 
-cat('### Seasonality: Placeholder texts')
+cat('### Sazonalidade: Textos Placeholder')
 cat('\n')
 
 if(season_possibilities %>% nrow() == 0){
-  cat('No seasonality found'); cat('\n')
+  cat('Sem sazonalidade'); cat('\n')
 } else {
-  cat('Seasonality found'); cat('\n')
+  cat('Sazonalidade encontrada nas possibilidades a seguir:'); cat('\n')
   cat(season_possibilities); cat('\n')
 }

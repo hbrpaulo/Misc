@@ -1,0 +1,10 @@
+## Curva com referência pontual
+
+```{r}
+graph <- 'punctual'
+source('scripts/IntervalMainPlot.R')
+```
+
+### Tendências
+
+#### Gráficos
