@@ -1,0 +1,10 @@
+## Curva com referência intervalar
+
+```{r}
+graph <- 'interval'
+source('scripts/IntervalMainPlot.R')
+```
+
+### Tendências
+
+#### Gráficos

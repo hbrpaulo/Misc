@@ -1,0 +1,35 @@
+## Curva sem referência
+<!-- {.tabset .tabset-fade .tabset-pills} -->
+
+```{r}
+graph <- 'none'
+source('scripts/IntervalMainPlot.R')
+```
+
+### Tendências
+
+#### Gráficos
+
+```{r tests}
+source('NoReference/scripts/tests/trends_test.R')
+```
+
+```{r interpretation_trends, results='asis'}
+source('NoReference/scripts/interpretations/trends_interpretations.R')
+```
+
+### Sazonalidade
+
+#### Gráficos
+
+<!-- <details> -->
+<!--   <summary>Click to See</summary> -->
+```{r}
+par(mfrow = c(1, 2))
+source('NoReference/scripts/tests/seasonalities_test.R')
+```
+<!-- </details>  -->
+
+```{r interpretation_seasonnalities, results='asis'}
+source('NoReference/scripts/interpretations/seasonalities_interpretations.R')
+```

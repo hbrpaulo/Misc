@@ -1,6 +1,12 @@
-opcoes <- c("Option 1", "Option 2", "Option 3")
+# Usando a função askYesNo para escolher qual tipo de documento será gerado
+# análogo a utilização de shiny
 
-# Usando a função menu para escolher uma das opções
-escolha <- menu(opcoes, title = "Please choose one option:")
+reference <- askYesNo("Há referência?", default = TRUE)
+
+if(reference==TRUE){
+has_interval <- askYesNo("A referência é intervalar?", default = TRUE)
+}
+
+DocumentType <- reference+has_interval
 
 rmarkdown::render('Vignette.Rmd')

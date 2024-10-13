@@ -1,5 +1,5 @@
 ---
-title: "CurveInterpreter"
+title: "CurveInterpreter v0.3"
 output: 
   html_document: 
     toc: yes
@@ -29,67 +29,37 @@ results <- list()
 theme_set(theme_classic())
 ```
 
-# Estrutura
+# Análise {.tabset .tabset-fade .tabset-pills}
 
-<details>
-  <summary>Click to See</summary>
-```{r cronograma}
-source('scripts/Misc/diagrama.R')
-htmltools::includeHTML("output/diagram.html")
-```
-</details>
+## Estrutura
 
-# Análise para curva sem referência
-<!-- {.tabset .tabset-fade .tabset-pills} -->
-
-<details>
-  <summary>Click to See</summary>
-```{r example}
-source('scripts/Misc/example_creation.R')
-source('scripts/IntervalMainPlot.R')
-```
-</details>
-
-<!-- ![]("output/graph.svg") -->
-
-## Tendências
-
-### Gráficos
-
-<details>
-  <summary>Click to see the plots</summary>
-```{r tests}
-source('scripts/tests/trends_test.R')
-```
-</details>
-
-```{r interpretation_trends, results='asis'}
-source('scripts/interpretations/trends_interpretations.R')
+```{r cronograma, out.width='100%'}
+source('Misc/diagrama.R')
+diagram
 ```
 
-## Sazonalidade
-
-### Gráficos
-
-<!-- <details> -->
-<!--   <summary>Click to See</summary> -->
-```{r}
-par(mfrow = c(1, 2))
-source('scripts/tests/seasonalities_test.R')
-```
-<!-- </details>  -->
-
-```{r interpretation_seasonnalities, results='asis'}
-source('scripts/interpretations/seasonalities_interpretations.R')
+```{r, echo = FALSE}
+source('Misc/example_creation.R')
 ```
 
-<!-- importacao condicional de rmds -->
-<!-- ```{r} -->
-<!-- x <- mean(rnorm(100)) -->
 
-<!-- if(x<0){ -->
-<!--   cat(knitr::asis_output(knitr::knit_child("child01.Rmd", quiet=TRUE, envir=environment()))) -->
-<!-- }else{ -->
-<!--   cat(knitr::asis_output(knitr::knit_child("child02.Rmd", quiet=TRUE, envir=environment()))) -->
-<!-- } -->
-<!-- ``` -->
+```{r noref, results='asis'}
+if(DocumentType >= 0){
+  cat(knitr::asis_output(knitr::knit_child("rmd_noref.Rmd", 
+                                           quiet=TRUE, envir=environment())))
+}
+```
+
+```{r punctual, results='asis'}
+if(DocumentType >= 1){
+  cat(knitr::asis_output(knitr::knit_child("rmd_reference_punctual.Rmd",
+                                           quiet=TRUE, envir=environment())))
+}
+```
+
+```{r interval, results='asis'}
+if(DocumentType == 2){
+  cat(knitr::asis_output(knitr::knit_child("rmd_reference_interval.Rmd",
+                                           quiet=TRUE, envir=environment())))
+}
+```
