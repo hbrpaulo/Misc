@@ -1,11 +1,17 @@
 ---
-title: "CurveInterpreter v0.3"
-output: 
-  html_document: 
-    toc: yes
-    number_sections: yes
-    toc_depth: 4
-    theme: cerulean
+title: "CurveInterpreter v`r 0+round(17/34,2)`"
+
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+# output: 
+#     html_document:
+#     code_folding: show
+#     toc: yes
+#     number_sections: yes
+#     toc_depth: 4
+#     theme: cerulean
 date: "`r Sys.Date()`"
 editor_options: 
   chunk_output_type: console
@@ -16,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       message = FALSE,
                       knitr.svg.object = TRUE, 
-                      out.width='60%',
+                      out.width='40%',
                       fig.align = 'center')
 ```
 
@@ -27,9 +33,13 @@ library(DiagrammeR)
 alpha <- .5
 results <- list()
 theme_set(theme_classic())
+if(!exists('DocumentType')){
+  DocumentType <- 2
+}
 ```
 
-# Análise {.tabset .tabset-fade .tabset-pills}
+# Análise 
+<!-- {.tabset .tabset-fade .tabset-pills} -->
 
 ## Estrutura
 
@@ -40,6 +50,13 @@ diagram
 
 ```{r, echo = FALSE}
 source('Misc/example_creation.R')
+source('scripts/distances_calculator.R')
+source('scripts/fragmentation.R')
+```
+
+
+```{r, echo = FALSE}
+database <- fragmentation(distances_calculator(example1))
 ```
 
 

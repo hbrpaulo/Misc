@@ -1,6 +1,6 @@
 library(DiagrammeR)
 diagram <- mermaid('graph TD
-
+  
     Begin(CurveInterpreter) --> RefDummy(Há referência?)
     RefDummy --> AnInd(Sem<br>referência)
     AnInd --> NoRef(Análise<br>individual)
@@ -65,32 +65,40 @@ diagram <- mermaid('graph TD
       Dist1 --> Comp1[Comparações<br>entre as partes]
       Dist2 --> Comp2[Comparações<br>entre as partes]
       
-      %% Aesthetics
-      
-      style SazG fill:#2BD72F
-      style SazG1 fill:#2BD72F
-      style SazG2 fill:#2BD72F
-      
-      style SazF fill:#EEA35D
-      style SazF1 fill:#EEA35D
-      style SazF2 fill:#EEA35D
-      
-      style TrendG fill:#2BD72F
-      style TrendG1 fill:#2BD72F
-      style TrendG2 fill:#2BD72F
-      
-      style TrendF fill:#2BD72F
-      style TrendF1 fill:#2BD72F
-      style TrendF2 fill:#2BD72F
-      
-      style Trend fill:#2BD72F
-      style Trend1 fill:#2BD72F
-      style Trend2 fill:#EEA35D
-      
-      style Comp fill:#FFFFFF
-      style Comp1 fill:#FFFFFF
-      style Comp2 fill:#FFFFFF
-      
-      style Dist1 fill:#FFFFFF
-      style Dist2 fill:#FFFFFF
+    %% Aesthetics
+    
+    style RefDummy fill:#2BD72F
+    
+    style NoRef fill:#2BD72F
+    style AnInd fill:#2BD72F
+    style Ref fill:#2BD72F
+    style RefPont fill:#2BD72F
+    style RefInt fill:#2BD72F
+    
+    style SazG fill:#2BD72F
+    style SazG1 fill:#2BD72F
+    style SazG2 fill:#2BD72F
+    
+    style SazF fill:#EEA35D
+    style SazF1 fill:#EEA35D
+    style SazF2 fill:#EEA35D
+    
+    style TrendG fill:#2BD72F
+    style TrendG1 fill:#2BD72F
+    style TrendG2 fill:#2BD72F
+    
+    style TrendF fill:#2BD72F
+    style TrendF1 fill:#2BD72F
+    style TrendF2 fill:#2BD72F
+    
+    style Trend fill:#2BD72F
+    style Trend1 fill:#2BD72F
+    style Trend2 fill:#2BD72F
+    
+    style Comp fill:#FFFFFF
+    style Comp1 fill:#FFFFFF
+    style Comp2 fill:#FFFFFF
+    
+    style Dist1 fill:#FFFFFF
+    style Dist2 fill:#FFFFFF
 ')

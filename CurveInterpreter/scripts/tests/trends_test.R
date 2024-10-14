@@ -1,11 +1,29 @@
+if (!exists("database")) {
+  # Parameters for the series
+  n <- 20  # Number of observations per cycle
+  m <- 30  # Number of cycles
+  
+  # Initialize the database
+  database <- tibble(data_series = numeric(n * m))
+  
+  # Generate the seasonal data series
+  database$data_series <-
+    sapply(
+      1:m,
+      FUN = function(x) {
+        seasonality <- (1:n) / 2  # Create a seasonal pattern
+        runif(n, 0, n / 5) + seasonality  # Add random noise to the seasonal pattern
+      }
+    ) %>% as.vector()
+}
 # Function to calculate the trend direction and p-value
 trend_direction_pvalue <- function(x) {
   aux <- aTSA::trend.test(x)  # Perform trend test
   return(list(
     pvalue = aux$p.value,  # Extract p-value
     direction = ifelse(aux$alternative == 'data have a decreasing trend', 
-                       'decreasing', 
-                       'increasing')  # Determine trend direction
+                       'crescente', 
+                       'decrescente')  # Determine trend direction
   ))
 }
 
