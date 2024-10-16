@@ -11,11 +11,11 @@ source('scripts/IntervalMainPlot.R')
 #### Gráficos
 
 ```{r tests}
-source('NoReference/scripts/tests/trends_test.R')
+source('scripts/tests/trends_test.R')
 ```
 
 ```{r interpretation_trends, results='asis'}
-source('NoReference/scripts/interpretations/trends_interpretations.R')
+source('scripts/interpretations/trends_interpretations.R')
 ```
 
 ### Sazonalidade
@@ -25,11 +25,10 @@ source('NoReference/scripts/interpretations/trends_interpretations.R')
 <!-- <details> -->
 <!--   <summary>Click to See</summary> -->
 ```{r}
-par(mfrow = c(1, 2))
-source('NoReference/scripts/tests/seasonalities_test.R')
+source('scripts/tests/seasonalities_test.R')
 ```
 <!-- </details>  -->
 
 ```{r interpretation_seasonnalities, results='asis'}
-source('NoReference/scripts/interpretations/seasonalities_interpretations.R')
+source('scripts/interpretations/seasonalities_interpretations.R')
 ```

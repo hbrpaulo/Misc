@@ -10,7 +10,7 @@ results$indicators$trend$global <- paste('Tendência global:',
                                  } else {
                                    'não'
                                  },
-                                 results$metrics$trend$global$direcao)
+                                 results$metrics$trend$global$direction)
 
 results$indicators$trend$begin <- paste('Tendência no começo:',
                                 if (results$metrics$trend$begin$pvalue < alpha) {
@@ -18,7 +18,7 @@ results$indicators$trend$begin <- paste('Tendência no começo:',
                                 } else {
                                   'não'
                                 },
-                                results$metrics$trend$begin$direcao)
+                                results$metrics$trend$begin$direction)
 
 results$indicators$trend$middle <- paste('Tendência no meio:',
                                  if (results$metrics$trend$middle$pvalue < alpha) {
@@ -26,7 +26,7 @@ results$indicators$trend$middle <- paste('Tendência no meio:',
                                  } else {
                                    'não'
                                  },
-                                 results$metrics$trend$middle$direcao)
+                                 results$metrics$trend$middle$direction)
 
 results$indicators$trend$end <- paste('Tendência no final:',
                               if (results$metrics$trend$end$pvalue < alpha) {
@@ -34,7 +34,7 @@ results$indicators$trend$end <- paste('Tendência no final:',
                               } else {
                                 'não'
                               },
-                              results$metrics$trend$end$direcao)
+                              results$metrics$trend$end$direction)
 
 cat(results$indicators$trend$global)
 cat('\n\n')

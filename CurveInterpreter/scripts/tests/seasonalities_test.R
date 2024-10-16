@@ -5,10 +5,10 @@ if (!exists("database")) {
   m <- 30  # Number of cycles
   
   # Initialize the database
-  database <- tibble(data_series = numeric(n * m))
+  example1 <- tibble(data_series = numeric(n * m))
   
   # Generate the seasonal data series
-  database$data_series <-
+  example1$data_series <-
     sapply(
       1:m,
       FUN = function(x) {
@@ -16,61 +16,67 @@ if (!exists("database")) {
         runif(n, 0, n / 5) + seasonality  # Add random noise to the seasonal pattern
       }
     ) %>% as.vector()
+  database <- fragmentation(example1)
 }
 
 # Function to find the variance between cycles for a given frequency
-seasonality_finder <- function(x, freq) {
+variance_between_cycles <- function(x, freq) {
   x <- as.vector(x)
   aux <-
-    matrix(x, ncol = freq, byrow = TRUE)  # Reshape data into cycles
+    try(matrix(x, ncol = freq, byrow = TRUE), silent = TRUE)  # Reshape data into cycles
   vars <-
     apply(aux, 2, var)  # Calculate variance for each cycle's iteration
   return(mean(vars))  # Return the average variance across cycles
 }
 
-# Create a data frame to store frequencies and their corresponding variances
-n_min <- 7  # Minimum number of elements in each cycle to consider
-aux <- tibble(
-  freq = n_min:(length(database$data_series) / 3),
-  # Frequency range
-  variance_between_cycles = sapply(
-    n_min:(length(database$data_series) / 3),
-    FUN = function(f) {
-      seasonality_finder(database$data_series, freq = f)  # Calculate variance for each frequency
-    }
+seasonality_finder <- function(data = database, 
+                               n_min = 7, n_centers = 2){
+  # n_min: Minimum number of elements in each cycle to consider
+  
+  # Create a data frame to store frequencies and their corresponding variances
+  aux <- tibble(
+    freq = n_min:(length(data$data_series) / 3),
+    # Frequency range
+    vars = sapply(
+      n_min:(length(data$data_series) / 3),
+      FUN = function(f) {
+        # Calculate variance for each frequency
+        variance_between_cycles(data$data_series, freq = f)
+      }
+    )
   )
-)
-
-# Apply k-means clustering to group frequencies based on variance
-divide_groups <- kmeans(aux$variance_between_cycles, centers = 2)
-aux$group <- divide_groups$cluster
-
-# Plot the variance against frequencies, color-coded by group
-plot(
-  aux$freq,
-  xlab = 'Frequency',
-  aux$variance_between_cycles,
-  ylab = "Within Variance",
-  type = "l",
-  main = str_wrap("Variance Between Cycles for Each Frequency", width = 35)
-)
-points(
-  x = aux$freq,
-  y = aux$variance_between_cycles,
-  col = aux$group,
-  pch = 19
-)
-
-# Identify the group with the lowest variance
-season_possibilities <-
-  aux[aux$group == which.min(divide_groups$centers),] %>%
-  arrange(variance_between_cycles) %>%
-  slice(1:5) %>%  # Select the five lowest variances
-  select(-group) %>%
-  mutate(Test = "KW-R")  # Specify the test used
-
-# Saving p-values from seasonality tests for each frequency
-season_possibilities$pvalue <- NA
+  
+  # Apply k-means clustering to group frequencies based on variance
+  divide_groups <- kmeans(aux$vars, centers = n_centers)
+  aux$group <- divide_groups$cluster
+  
+  # Plot the variance against frequencies, color-coded by group
+  plot(
+    aux$freq,
+    xlab = 'Frequency',
+    aux$vars,
+    ylab = "Within Variance",
+    type = "l",
+    main = str_wrap("Variance Between Cycles for Each Frequency", width = 35)
+  )
+  points(
+    x = aux$freq,
+    y = aux$vars,
+    col = aux$group,
+    pch = 19
+  )
+  
+  # Identify the group with the lowest variance
+  aux <-
+    aux[aux$group == which.min(divide_groups$centers),] %>%
+    arrange(vars) %>%
+    slice(1:5) %>%  # Select the five lowest variances
+    select(-group) %>%
+    mutate(Test = "KW-R",# Specify the test used
+           pvalue = NA) 
+  return(aux)
+}  
+season_possibilities <- seasonality_finder()
 
 j <- 1
 for (i in season_possibilities$freq) {
@@ -117,5 +123,3 @@ plot(
   xlab = 'Frequency',
   main = str_wrap("P-value of the Seasonality Test KW for Each Frequency", width = 35)
 )
-
-par(mfrow = c(1, 1))  # Reset plotting parameters

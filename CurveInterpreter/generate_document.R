@@ -9,4 +9,9 @@ has_interval <- askYesNo("A referência é intervalar?", default = TRUE)
 
 DocumentType <- reference+has_interval
 
+if(!exists('DocumentType')){
+  DocumentType <- 2
+}
+
 rmarkdown::render('Vignette.Rmd')
+
