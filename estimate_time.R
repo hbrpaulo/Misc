@@ -64,8 +64,8 @@ calculate_eta <- function(time.i, time.f = Sys.time(), M, iter, n_print) {
   tempo_total_secs <- as.numeric(tempo_decorrido) + eta_secs
   
   # Conversão de tempo para a unidade adequada usando a função auxiliar
-  eta <- converter_tempo(eta_secs)
-  tempo_total <- converter_tempo(tempo_total_secs)
+  eta <- convert_time(eta_secs)
+  tempo_total <- convert_time(tempo_total_secs)
   
   # Formatação de saída
   if (iter == M) {
