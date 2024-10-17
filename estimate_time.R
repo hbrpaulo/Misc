@@ -71,12 +71,12 @@ calculate_eta <- function(time.i, time.f = Sys.time(), M, iter, n_print) {
   if (iter == M) {
     aux <- paste0(
       '\n\nTempo total de execução: ', sprintf('%.2f', eta$tempo_value), ' ', eta$units_time, 
-      '\nTempo estimado total (incluindo decorrido): ', sprintf('%.2f', tempo_total$tempo_value), ' ', tempo_total$units_time, '\n\n'
+      '\nTempo decorrido total: ', sprintf('%.2f', tempo_total$tempo_value), ' ', tempo_total$units_time, '\n\n'
     )
   } else {
     aux <- paste0(
       iter, ' - \t eta:\t', sprintf('%.2f', eta$tempo_value), ' ', eta$units_time, 
-      ' \tTempo total estimado: ', sprintf('%.2f', tempo_total$tempo_value), ' ', tempo_total$units_time,
+      ' \tTempo total estimado: (incluindo decorrido)', sprintf('%.2f', tempo_total$tempo_value), ' ', tempo_total$units_time,
       ifelse(iter %% n_print == 0, '\n', '\r')
     )
   }
