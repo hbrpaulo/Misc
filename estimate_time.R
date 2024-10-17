@@ -10,7 +10,7 @@
 #'   - `units_time`: a unidade de tempo (semanas, dias, horas, minutos ou segundos).
 #'
 #' @examples
-#' converter_tempo(3600)  # Converte 3600 segundos para 1 hora
+#' convert_time(3600)  # Converte 3600 segundos para 1 hora
 convert_time <- function(tempo_secs) {
   if (tempo_secs > 604800) {  # Mais que 7 dias (em segundos)
     tempo_value <- tempo_secs / 604800
@@ -49,7 +49,7 @@ convert_time <- function(tempo_secs) {
 #' time.i <- Sys.time()
 #' Sys.sleep(2)  # Simula um tempo decorrido
 #' calcular_eta(time.i, Sys.time(), M = 100, iter = 50, n_print = 10)
-calculate_eta <- function(time.i, time.f = Sys.time(), M, iter, n_print) {
+calculate_eta <- function(time.i, time.f = Sys.time(), M, iter, n_print = 50) {
   
   if (iter == 0) { iter <- 1 }  # Evitar divisão por zero
   if (iter < 0) {
@@ -64,8 +64,8 @@ calculate_eta <- function(time.i, time.f = Sys.time(), M, iter, n_print) {
   tempo_total_secs <- as.numeric(tempo_decorrido) + eta_secs
   
   # Conversão de tempo para a unidade adequada usando a função auxiliar
-  eta <- converter_tempo(eta_secs)
-  tempo_total <- converter_tempo(tempo_total_secs)
+  eta <- convert_time(eta_secs)
+  tempo_total <- convert_time(tempo_total_secs)
   
   # Formatação de saída
   if (iter == M) {
