@@ -72,7 +72,7 @@ seasonality_finder <- function(data = database,
     arrange(vars) %>%
     slice(1:5) %>%  # Select the five lowest variances
     select(-group) %>%
-    mutate(Test = "KW-R",# Specify the test used
+    mutate(test = "KW-R",# Specify the test used
            pvalue = NA) 
   return(aux)
 }  
@@ -121,5 +121,17 @@ plot(
   pch = 19,
   ylab = "P-value",
   xlab = 'Frequency',
-  main = str_wrap("P-value of the Seasonality Test KW for Each Frequency", width = 35)
+  main = str_wrap("P-value of the Seasonality test KW for Each Frequency", width = 35)
 )
+
+season_possibilities <- season_possibilities %>% arrange(freq)
+
+season_possibilities <- season_possibilities %>% 
+  add_row(freq = 7, vars = 2, test = 'w', pvalue = .05, has_equivalence = FALSE) %>% 
+  add_row(freq = 13, vars = 2, test = 'w', pvalue = .1, has_equivalence = FALSE) %>% 
+  add_row(freq = 17, vars = 2, test = 'w', pvalue = 1, has_equivalence = FALSE) %>% 
+  mutate(significance = case_when(pvalue <= alpha/2  ~ "Altamente significativas",
+                        pvalue <= alpha ~ "Significativas",
+                        pvalue <= alpha*2 ~ "Alguma significância",
+                        .default = 'Não significativa'))
+

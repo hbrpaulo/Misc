@@ -1,10 +1,12 @@
 ---
 title: "CurveInterpreter v`r 0+round(17/34,2)`"
-
 output:
   prettydoc::html_pretty:
     theme: architect
     highlight: github
+    toc: yes
+    number_sections: yes
+    toc_depth: 4
 # output: 
 #     html_document:
 #     code_folding: show
@@ -24,9 +26,11 @@ knitr::opts_chunk$set(echo = TRUE,
                       knitr.svg.object = TRUE, 
                       out.width='40%',
                       fig.align = 'center')
+options(digits = 2)
 ```
 
 ```{r, echo = FALSE}
+set.seed(13796163)
 library(tidyverse)
 library(DiagrammeR)
 #plot(x)
@@ -34,7 +38,7 @@ alpha <- .5
 results <- list()
 theme_set(theme_classic())
 if(!exists('DocumentType')){
-  DocumentType <- 2
+  DocumentType <- 0
 }
 ```
 
@@ -49,6 +53,7 @@ diagram
 ```
 
 ```{r, echo = FALSE}
+source('https://raw.githubusercontent.com/hbrpaulo/Misc/refs/heads/main/format_sig.R')
 source('Misc/example_creation.R')
 source('scripts/distances_calculator.R')
 source('scripts/fragmentation.R')
@@ -56,7 +61,8 @@ source('scripts/fragmentation.R')
 
 
 ```{r, echo = FALSE}
-database <- fragmentation(distances_calculator(example1))
+#database <- fragmentation(distances_calculator(example1))
+source('scripts/tests/seasonalities_test.R')
 ```
 
 
