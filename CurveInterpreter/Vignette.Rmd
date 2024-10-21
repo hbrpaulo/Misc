@@ -34,7 +34,7 @@ set.seed(13796163)
 library(tidyverse)
 library(DiagrammeR)
 #plot(x)
-alpha <- .5
+alpha <- .05
 results <- list()
 theme_set(theme_classic())
 if(!exists('DocumentType')){

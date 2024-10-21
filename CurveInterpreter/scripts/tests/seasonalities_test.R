@@ -133,5 +133,5 @@ season_possibilities <- season_possibilities %>%
   mutate(significance = case_when(pvalue <= alpha/2  ~ "Altamente significativas",
                         pvalue <= alpha ~ "Significativas",
                         pvalue <= alpha*2 ~ "Alguma significância",
-                        .default = 'Não significativa'))
+                        .default = 'Não significativas'))
 
