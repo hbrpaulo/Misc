@@ -1,13 +1,13 @@
 ---
-title: "CurveInterpreter v`r 0+round(17/34,2)`"
+title: "CurveInterpreter v`r 0+round(18/34,2)`"
 output:
-  prettydoc::html_pretty:
-    theme: architect
-    highlight: github
-    toc: yes
-    number_sections: yes
-    toc_depth: 4
-# output: 
+  # prettydoc::html_pretty:
+  #   theme: architect
+  #   highlight: github
+  #   toc: yes
+  #   number_sections: yes
+  #   toc_depth: 4
+# output:
 #     html_document:
 #     code_folding: show
 #     toc: yes
@@ -20,25 +20,29 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,
+knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE,
                       message = FALSE,
                       knitr.svg.object = TRUE, 
-                      out.width='40%',
-                      fig.align = 'center')
+                      out.width='50%',
+                      fig.align = 'center'
+                      )
 options(digits = 2)
+set.seed(13796163)
 ```
 
-```{r, echo = FALSE}
+```{r}
 set.seed(13796163)
 library(tidyverse)
 library(DiagrammeR)
-#plot(x)
+library(knitr)
+library(kableExtra)
+
 alpha <- .05
 results <- list()
 theme_set(theme_classic())
 if(!exists('DocumentType')){
-  DocumentType <- 0
+  DocumentType <- 1
 }
 ```
 
@@ -52,7 +56,7 @@ source('Misc/diagrama.R')
 diagram
 ```
 
-```{r, echo = FALSE}
+```{r}
 source('https://raw.githubusercontent.com/hbrpaulo/Misc/refs/heads/main/format_sig.R')
 source('Misc/example_creation.R')
 source('scripts/distances_calculator.R')
@@ -60,8 +64,8 @@ source('scripts/fragmentation.R')
 ```
 
 
-```{r, echo = FALSE}
-#database <- fragmentation(distances_calculator(example1))
+```{r}
+database <- fragmentation(distances_calculator(example1))
 source('scripts/tests/seasonalities_test.R')
 ```
 

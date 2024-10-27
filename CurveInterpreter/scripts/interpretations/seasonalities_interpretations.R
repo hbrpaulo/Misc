@@ -3,39 +3,42 @@ season_significance <- season_possibilities %>%
   group_by(significance) %>% 
   summarise(signif_equivalents = paste(freq, collapse = ', '))
 
-for(i in 1:nrow(season_significance)){
-  cat('- ', season_significance$significance[i],
-      ':', season_significance$signif_equivalents[i], '\n')
-}
+season_group_possibilities <- season_possibilities %>% 
+  group_by(significance) %>% 
+  summarise(freq = paste(freq, collapse = ', '),
+            pvalue = max(pvalue))
 
-cat('\n')
-# a ----------------------------------
-
-cat('### Sazonalidade')
-
+Saz_No <- paste0('- A(s) frequência(s) de ', 
+                 season_group_possibilities$freq,
+                 ' apresentaram um p-valor indicativo de ',
+                 str_to_lower(season_group_possibilities$significance))
 
 p_saz_interpret <- ifelse(
-  season_possibilities$pvalue<=alpha,
+  season_group_possibilities$pvalue<=alpha,
   ', o que sugere que há evidências de que essa frequência seja sazonal.',
   ', o que sugere que não há evidências de que essa frequência seja sazonal.'
 )
-Saz_No <- paste0('A frequência de ', season_possibilities$freq, ' apresentou um p-valor de ', format_sig(season_possibilities$pvalue), p_saz_interpret)
 
-
+# a ----------------------------------
+cat('\n')
 
 if(season_possibilities %>% nrow() == 0){
   cat('Sem sazonalidade encontrada na análise'); cat('\n')
 } else {
   
   freqs <- paste(season_possibilities$freq, collapse = ', ')
-  cat('\n#### Sazonalidade encontrada nas possibilidades a seguir:', freqs, '{-}')
-  cat('\n\nSazonalidade é a presença de padrões recorrentes nos dados ao longo de intervalos específicos, como dias, semanas ou meses, que se repetem com uma frequência definida. Esses padrões indicam que há algum fator cíclico influenciando a variação dos dados em determinados períodos. Identificar a sazonalidade e suas possíveis frequências em uma série temporal é crucial, pois permite reconhecer essas flutuações regulares e diferenciá-las de outros tipos de variação, como tendências ou ruídos. A análise da frequência dos ciclos sazonais nos ajuda a prever comportamentos futuros e ajustar modelos de acordo com as variações temporais esperadas.')
+  
+  cat('\n\n**Caso haja sazonalidade, as principais suspeitam seriam nas possibilidades a seguir:**', freqs)
+  
+  cat(season_possibilities %>% 
+        select(-has_equivalence, -significance) %>% 
+        mutate(pvalue = format_sig(pvalue)) %>% 
+        kbl(align = 'ccc', 
+            col.names = c('Frequência', 'Variância', 'Teste', 'Valor de P')) %>% 
+        kable_classic %>% 
+        kable_styling(full_width = FALSE))
+  
   cat('\n\nCom base nos resultados obtidos, observamos que:\n\n')
   for(i in Saz_No){
-    cat(i);cat('\n\n')}
+    cat(i);cat('\n')}
 }
-
-
-
-
-

@@ -27,13 +27,8 @@ diagram <- mermaid('graph TD
       RefInt --> Saz2(Sazonalidade)
       
       Saz --> SazG(Sazonalidade<br>global)
-      Saz --> SazF(Sazonalidade<br>frag.)
-      
       Saz1 --> SazG1(Sazonalidade<br>global)
-      Saz1 --> SazF1(Sazonalidade<br>frag.)
-      
       Saz2 --> SazG2(Sazonalidade<br>global)
-      Saz2 --> SazF2(Sazonalidade<br>frag.)
       
       %% Specfics aspects
       
@@ -46,19 +41,16 @@ diagram <- mermaid('graph TD
       TrendG --> Comp[Comparações<br>entre as partes]
       TrendF --> Comp
       SazG --> Comp
-      SazF --> Comp
       
       %%Comparações<br>entre as partes
       
       TrendG1 --> Dist1[Distância entre<br>curva e a referência]
       TrendF1 --> Dist1
       SazG1 --> Dist1
-      SazF1 --> Dist1
 
       TrendG2 --> Dist2[Distância entre<br>curva e a referência]
       TrendF2 --> Dist2
-      SazG2 --> Dist2
-      SazF2 --> Dist2     
+      SazG2 --> Dist2    
       Seq_out --> Dist2
       Count_out --> Dist2
       
@@ -79,9 +71,9 @@ diagram <- mermaid('graph TD
     style SazG1 fill:#2BD72F
     style SazG2 fill:#2BD72F
     
-    style SazF fill:#EEA35D
-    style SazF1 fill:#EEA35D
-    style SazF2 fill:#EEA35D
+    style Saz fill:#2BD72F
+    style Saz1 fill:#2BD72F
+    style Saz2 fill:#2BD72F
     
     style TrendG fill:#2BD72F
     style TrendG1 fill:#2BD72F

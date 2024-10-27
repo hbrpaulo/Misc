@@ -1,10 +1,73 @@
 ## Curva com referência pontual
 
 ```{r}
-graph <- 'punctual'
-source('scripts/IntervalMainPlot.R')
+database <- fragmentation(distances_calculator(example1))
 ```
 
-### Tendências
 
-#### Gráficos
+```{r}
+graph <- 'punctual'
+source('scripts/IntervalMainPlot.R')
+database <- database %>% 
+  mutate(data_series = difference_ref_data)
+```
+
+### Tendência na distância entre a curva e a referência
+
+#### **Gráficos**
+
+```{r ref_tests}
+source('scripts/tests/trends_test.R')
+source('scripts/tests/seasonalities_test.R')
+```
+
+```{r ref_interpretation_trends, results='asis'}
+source('scripts/interpretations/trends_interpretations.R')
+```
+
+
+### Sazonalidade na distância entre a curva e a referência
+
+#### **Gráficos**
+
+<!-- <details> -->
+<!--   <summary>Click to See</summary> -->
+```{r, fig.align='default'}
+# Plot the variance against frequencies, color-coded by group
+plot(
+  season_possibilities_all$freq,
+  xlab = 'Frequency',
+  season_possibilities_all$vars,
+  ylab = "Within Variance",
+  type = "l",
+  main = str_wrap("Variance Between Cycles for Each Frequency", width = 35)
+)
+points(
+  x = season_possibilities_all$freq,
+  y = season_possibilities_all$vars,
+  col = season_possibilities_all$group,
+  pch = 19
+)
+
+# Plot the p-values of the seasonality test for each frequency
+plot(
+  x = 7:(length(database$data_series) / 3),
+  y = sapply(7:(length(
+    database$data_series
+  ) / 3),
+  function(f) {
+    seastests::kw(ts(database$data_series,
+                     frequency = f), freq = f)$Pval
+  }),
+  type = "o",
+  pch = 19,
+  ylab = "P-value",
+  xlab = 'Frequency',
+  main = str_wrap("P-value of the Seasonality test KW for Each Frequency", width = 35)
+)
+```
+<!-- </details>  -->
+
+```{r ref_interpretation_seasonnalities, results='asis'}
+source('scripts/interpretations/seasonalities_interpretations.R')
+```
