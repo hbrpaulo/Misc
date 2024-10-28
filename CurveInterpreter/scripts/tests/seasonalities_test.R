@@ -5,10 +5,10 @@ if (!exists("database")) {
   m <- 30  # Number of cycles
   
   # Initialize the database
-  example1 <- tibble(data_series = numeric(n * m))
+  example2 <- tibble(data_series = numeric(n * m))
   
   # Generate the seasonal data series
-  example1$data_series <-
+  example2$data_series <-
     sapply(
       1:m,
       FUN = function(x) {
@@ -16,7 +16,7 @@ if (!exists("database")) {
         runif(n, 0, n / 5) + seasonality  # Add random noise to the seasonal pattern
       }
     ) %>% as.vector()
-  database <- fragmentation(example1)
+  database <- fragmentation(example2)
 }
 
 # Function to find the variance between cycles for a given frequency
@@ -51,7 +51,8 @@ seasonality_finder <- function(data = database,
   aux$group <- divide_groups$cluster
   
   return(aux)
-}  
+}
+
 season_possibilities_all <- seasonality_finder()
 
 # Identify the group with the lowest variance
@@ -98,8 +99,8 @@ season_possibilities <- season_possibilities %>%
   # add_row(freq = 7, vars = 2, test = 'w', pvalue = .05, has_equivalence = FALSE) %>% 
   # add_row(freq = 13, vars = 2, test = 'w', pvalue = .1, has_equivalence = FALSE) %>% 
   # add_row(freq = 17, vars = 2, test = 'w', pvalue = 1, has_equivalence = FALSE) %>% 
-  mutate(significance = case_when(pvalue <= alpha/2  ~ "Alta significância",
-                        pvalue <= alpha ~ "Significância",
-                        pvalue <= alpha*2 ~ "Alguma significância",
-                        .default = 'Não significância'))
+  mutate(significance = case_when(pvalue <= alpha/2  ~ "Alta signific??ncia",
+                        pvalue <= alpha ~ "Signific??ncia",
+                        pvalue <= alpha*2 ~ "Alguma signific??ncia",
+                        .default = 'N??o signific??ncia'))
 

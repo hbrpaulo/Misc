@@ -1,19 +1,19 @@
 ---
-title: "CurveInterpreter v`r 0+round(18/34,2)`"
-output:
-  # prettydoc::html_pretty:
-  #   theme: architect
-  #   highlight: github
-  #   toc: yes
-  #   number_sections: yes
-  #   toc_depth: 4
+title: "CurveInterpreter v`r 0+round(22/30,2)`"
 # output:
-#     html_document:
-#     code_folding: show
+#   prettydoc::html_pretty:
+#     theme: architect
+#     highlight: github
 #     toc: yes
 #     number_sections: yes
 #     toc_depth: 4
-#     theme: cerulean
+output:
+    html_document:
+    code_folding: show
+    toc: yes
+    number_sections: yes
+    toc_depth: 4
+    theme: cerulean
 date: "`r Sys.Date()`"
 editor_options: 
   chunk_output_type: console
@@ -37,6 +37,11 @@ library(tidyverse)
 library(DiagrammeR)
 library(knitr)
 library(kableExtra)
+# library(janitor)
+# library(seastests)
+# library(DiagrammeR)
+# library(prettydoc)
+# library(aTSA)
 
 alpha <- .05
 results <- list()
@@ -46,8 +51,7 @@ if(!exists('DocumentType')){
 }
 ```
 
-# Análise 
-<!-- {.tabset .tabset-fade .tabset-pills} -->
+# Análise {.tabset .tabset-fade .tabset-pills}
 
 ## Estrutura
 
@@ -65,7 +69,7 @@ source('scripts/fragmentation.R')
 
 
 ```{r}
-database <- fragmentation(distances_calculator(example1))
+#database <- fragmentation(distances_calculator(example1))
 source('scripts/tests/seasonalities_test.R')
 ```
 
@@ -78,6 +82,7 @@ if(DocumentType >= 0){
 ```
 
 ```{r punctual, results='asis'}
+database <- fragmentation(distances_calculator(example1))
 if(DocumentType >= 1){
   cat(knitr::asis_output(knitr::knit_child("rmd_reference_punctual.Rmd",
                                            quiet=TRUE, envir=environment())))

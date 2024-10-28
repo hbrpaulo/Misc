@@ -1,5 +1,4 @@
-## Curva sem referência
-<!-- {.tabset .tabset-fade .tabset-pills} -->
+## Curva sem referência {.tabset .tabset-fade .tabset-pills}
 
 ```{r}
 graph <- 'none'
@@ -66,3 +65,18 @@ plot(
 ```{r interpretation_seasonnalities, results='asis'}
 source('scripts/interpretations/seasonalities_interpretations.R')
 ```
+
+### Comparação entre os fragmentos
+
+```{r}
+source('scripts/tests/fragments_comparison_test.R')
+```
+
+```{r}
+partdiff_tb
+partdiff_plot
+```
+
+```{r interpretation_fragments, results='asis'}
+```
+

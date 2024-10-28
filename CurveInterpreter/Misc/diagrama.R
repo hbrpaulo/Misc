@@ -87,7 +87,7 @@ diagram <- mermaid('graph TD
     style Trend1 fill:#2BD72F
     style Trend2 fill:#2BD72F
     
-    style Comp fill:#FFFFFF
+    style Comp fill:#E3A86D
     style Comp1 fill:#FFFFFF
     style Comp2 fill:#FFFFFF
     
