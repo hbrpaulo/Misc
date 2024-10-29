@@ -10,15 +10,21 @@ source('scripts/IntervalMainPlot.R')
 
 #### **Gráficos**
 
-```{r tests}
+```{r trends_tests}
 source('scripts/tests/trends_test.R')
+results$noref$metrics$trends <- trend_test(database, column = 'data_series')
 ```
 
-```{r interpretation_trends, results='asis'}
+```{r trends_interpretation, results='asis'}
 source('scripts/interpretations/trends_interpretations.R')
+trends_interpretations(results$noref$metrics$trends)
 ```
 
 ### Sazonalidade
+
+```{r}
+source('scripts/tests/seasonalities_test.R')
+```
 
 >Sazonalidade é a presença de padrões recorrentes nos dados ao longo de intervalos específicos, como dias, semanas ou meses, que se repetem com uma frequência definida. Esses padrões indicam que há algum fator cíclico influenciando a variação dos dados em determinados períodos. Identificar a sazonalidade e suas possíveis frequências em uma série temporal é crucial, pois permite reconhecer essas flutuações regulares e diferenciá-las de outros tipos de variação, como tendências ou ruídos. A análise da frequência dos ciclos sazonais nos ajuda a prever comportamentos futuros e ajustar modelos de acordo com as variações temporais esperadas.
   
@@ -27,54 +33,25 @@ source('scripts/interpretations/trends_interpretations.R')
 <!-- <details> -->
 <!--   <summary>Click to See</summary> -->
 ```{r, fig.align='default'}
-# Plot the variance against frequencies, color-coded by group
-plot(
-  season_possibilities_all$freq,
-  xlab = 'Frequency',
-  season_possibilities_all$vars,
-  ylab = "Within Variance",
-  type = "l",
-  main = str_wrap("Variance Between Cycles for Each Frequency", width = 35)
-)
-points(
-  x = season_possibilities_all$freq,
-  y = season_possibilities_all$vars,
-  col = season_possibilities_all$group,
-  pch = 19
-)
-
-# Plot the p-values of the seasonality test for each frequency
-plot(
-  x = 7:(length(database$data_series) / 3),
-  y = sapply(7:(length(
-    database$data_series
-  ) / 3),
-  function(f) {
-    seastests::kw(ts(database$data_series,
-                     frequency = f), freq = f)$Pval
-  }),
-  type = "o",
-  pch = 19,
-  ylab = "P-value",
-  xlab = 'Frequency',
-  main = str_wrap("P-value of the Seasonality test KW for Each Frequency", width = 35)
-)
+results$noref$metrics$seasonalities <- seasonality_tests(database, column = 'data_series')
 ```
 <!-- </details>  -->
 
 ```{r interpretation_seasonnalities, results='asis'}
 source('scripts/interpretations/seasonalities_interpretations.R')
+seasonalities_interpretations(results$noref$metrics$seasonalities)
 ```
 
 ### Comparação entre os fragmentos
 
 ```{r}
 source('scripts/tests/fragments_comparison_test.R')
+results$noref$metrics$frag_comparison <- frag_comparison(database, column = 'data_series')
 ```
 
 ```{r}
-partdiff_tb
-partdiff_plot
+results$noref$metrics$frag_comparison$partdiff_tb
+results$noref$metrics$frag_comparison$partdiff_plot
 ```
 
 ```{r interpretation_fragments, results='asis'}

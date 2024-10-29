@@ -27,11 +27,21 @@ trend_direction_pvalue <- function(x) {
   ))
 }
 
+trend_test <- function(database, column){
+  aux <- list()
+  database <- database %>% 
+    mutate(data_series = !!rlang::sym(column)) %>% 
+    select(data_series, part)
+  
+  aux$global <- trend_direction_pvalue(database$data_series)  # Overall trend for the entire series
+  aux$begin <- trend_direction_pvalue(database[database$part == 'beginning', ]$data_series)  # Trend for the beginning part
+  aux$middle <- trend_direction_pvalue(database[database$part == 'middle', ]$data_series)  # Trend for the middle part
+  aux$end <- trend_direction_pvalue(database[database$part == 'end', ]$data_series)  # Trend for the end part
+  
+  return(aux)
+}
+
 # Trend metrics calculations
-results$metrics$trend$global <- trend_direction_pvalue(database$data_series)  # Overall trend for the entire series
-results$metrics$trend$begin <- trend_direction_pvalue(database[database$part == 'beginning', ]$data_series)  # Trend for the beginning part
-results$metrics$trend$middle <- trend_direction_pvalue(database[database$part == 'middle', ]$data_series)  # Trend for the middle part
-results$metrics$trend$end <- trend_direction_pvalue(database[database$part == 'end', ]$data_series)  # Trend for the end part
 
 # Plot the trend decomposition using STL (Seasonal-Trend decomposition using Loess)
 plot(

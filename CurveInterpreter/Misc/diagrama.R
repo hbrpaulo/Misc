@@ -1,5 +1,4 @@
-library(DiagrammeR)
-diagram <- mermaid('graph TD
+diagram <- DiagrammeR::mermaid('graph TD
   
     Begin(CurveInterpreter) --> RefDummy(Há referência?)
     RefDummy --> AnInd(Sem<br>referência)

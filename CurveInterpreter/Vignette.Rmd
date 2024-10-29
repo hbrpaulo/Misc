@@ -43,7 +43,7 @@ library(kableExtra)
 # library(prettydoc)
 # library(aTSA)
 
-alpha <- .05
+alpha_global <- alpha <- .05
 results <- list()
 theme_set(theme_classic())
 if(!exists('DocumentType')){
@@ -51,7 +51,7 @@ if(!exists('DocumentType')){
 }
 ```
 
-# Análise {.tabset .tabset-fade .tabset-pills}
+# {.tabset .tabset-fade .tabset-pills}
 
 ## Estrutura
 
@@ -65,12 +65,7 @@ source('https://raw.githubusercontent.com/hbrpaulo/Misc/refs/heads/main/format_s
 source('Misc/example_creation.R')
 source('scripts/distances_calculator.R')
 source('scripts/fragmentation.R')
-```
-
-
-```{r}
-#database <- fragmentation(distances_calculator(example1))
-source('scripts/tests/seasonalities_test.R')
+database <- fragmentation(distances_calculator(example1))
 ```
 
 
