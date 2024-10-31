@@ -1,4 +1,4 @@
-msdr2 <- function(x, k = 2) {
+msdr <- function(x, k = 2) {
   # Remove NA values from input vector 'x' to avoid errors in calculations
   x <- na.omit(x)
   
@@ -13,3 +13,4 @@ msdr2 <- function(x, k = 2) {
     paste0(round(min(x), k), '~', round(max(x), k), ")") # Range: min ~ max
   )
 }
+# mean ± sd (min~max)
