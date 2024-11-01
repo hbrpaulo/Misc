@@ -42,6 +42,7 @@ library(kableExtra)
 # library(DiagrammeR)
 # library(prettydoc)
 # library(aTSA)
+# library(coda)
 
 alpha_global <- alpha <- .05
 results <- list()
