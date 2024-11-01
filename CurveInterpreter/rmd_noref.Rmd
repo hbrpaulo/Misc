@@ -32,12 +32,12 @@ source('scripts/tests/seasonalities_test.R')
 
 <!-- <details> -->
 <!--   <summary>Click to See</summary> -->
-```{r, fig.align='default'}
+```{r, fig.align='default', out.width='50%'}
 results$noref$metrics$seasonalities <- seasonality_tests(database, column = 'data_series')
 ```
 <!-- </details>  -->
 
-```{r interpretation_seasonnalities, results='asis'}
+```{r seasonnalitiesinterpretation, results='asis'}
 source('scripts/interpretations/seasonalities_interpretations.R')
 seasonalities_interpretations(results$noref$metrics$seasonalities)
 ```
@@ -49,11 +49,9 @@ source('scripts/tests/fragments_comparison_test.R')
 results$noref$metrics$frag_comparison <- frag_comparison(database, column = 'data_series')
 ```
 
-```{r}
-results$noref$metrics$frag_comparison$partdiff_tb
-results$noref$metrics$frag_comparison$partdiff_plot
+```{r, results='asis'}
+results$noref$metrics$frag_comparison$diff_plot
+lapply(results$noref$metrics$frag_comparison, 
+       FUN = function(x){
+         if(class(x)[1]=='tbl_df'){x %>% kable() %>% kable_styling('striped', full_width = F) %>% column_spec(1, width = '10em')}})
 ```
-
-```{r interpretation_fragments, results='asis'}
-```
-

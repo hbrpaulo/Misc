@@ -37,18 +37,19 @@ library(tidyverse)
 library(DiagrammeR)
 library(knitr)
 library(kableExtra)
+library(coda)
 # library(janitor)
 # library(seastests)
 # library(DiagrammeR)
 # library(prettydoc)
 # library(aTSA)
-# library(coda)
+
 
 alpha_global <- alpha <- .05
 results <- list()
 theme_set(theme_classic())
 if(!exists('DocumentType')){
-  DocumentType <- 1
+  DocumentType <- 0
 }
 ```
 
@@ -68,7 +69,6 @@ source('scripts/distances_calculator.R')
 source('scripts/fragmentation.R')
 database <- fragmentation(distances_calculator(example1))
 ```
-
 
 ```{r noref, results='asis'}
 if(DocumentType >= 0){
