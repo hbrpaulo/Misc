@@ -27,6 +27,8 @@ trend_direction_pvalue <- function(x) {
   ))
 }
 
+# Trend metrics calculations
+
 trend_test <- function(database, column){
   aux <- list()
   database <- database %>% 
@@ -41,12 +43,3 @@ trend_test <- function(database, column){
   return(aux)
 }
 
-# Trend metrics calculations
-
-# Plot the trend decomposition using STL (Seasonal-Trend decomposition using Loess)
-plot(
-  stl(ts(database$data_series, frequency = 10), s.window = 'periodic')[["time.series"]][, 2],
-  main = str_wrap('Trend Decomposition', width = 35),  # Title for the plot
-  xlab = 'Observations',  # X-axis label
-  ylab = 'Trend'  # Y-axis label
-)

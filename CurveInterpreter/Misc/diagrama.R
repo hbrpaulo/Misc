@@ -7,7 +7,11 @@ diagram <- DiagrammeR::mermaid('graph TD
 
     Ref -->RefPont(Com referência<br>pontual)
     Ref --> RefInt(Com referência<br>intervalar)
-    
+      
+      NoRef --> Summ(Medidas<br>descritivas)
+      RefPont --> Summ1(Medidas<br>descritivas)
+      RefInt --> Summ2(Medidas<br>descritivas)
+      
       NoRef --> Trend(Tendência)
       RefPont --> Trend1(Tendência)
       RefInt --> Trend2(Tendência)
@@ -47,7 +51,7 @@ diagram <- DiagrammeR::mermaid('graph TD
       TrendF1 --> Dist1
       SazG1 --> Dist1
 
-      TrendG2 --> Dist2[Distância entre<br>curva e a referência]
+      TrendG2 --> Dist2[Distância entre<br>curva e as bandas<br>do intervalo]
       TrendF2 --> Dist2
       SazG2 --> Dist2    
       Seq_out --> Dist2
@@ -86,10 +90,14 @@ diagram <- DiagrammeR::mermaid('graph TD
     style Trend1 fill:#2BD72F
     style Trend2 fill:#2BD72F
     
-    style Comp fill:#E3A86D
-    style Comp1 fill:#FFFFFF
-    style Comp2 fill:#FFFFFF
+    style Comp fill:#EEA35D
+    style Comp1 fill:#EEA35D
+    style Comp2 fill:#EEA35D
     
-    style Dist1 fill:#FFFFFF
+    style Dist1 fill:#2BD72F
     style Dist2 fill:#FFFFFF
+    
+    style Summ fill:#EEA35D
+    style Summ1 fill:#EEA35D
+    style Summ2 fill:#EEA35D
 ')

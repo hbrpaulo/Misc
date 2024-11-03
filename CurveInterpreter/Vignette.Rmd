@@ -1,5 +1,5 @@
 ---
-title: "CurveInterpreter v`r 0+round(22/30,2)`"
+title: "CurveInterpreter v`r 0+round(22/33,2)`"
 # output:
 #   prettydoc::html_pretty:
 #     theme: architect
@@ -45,11 +45,11 @@ library(coda)
 # library(aTSA)
 
 
-alpha_global <- alpha <- .05
+alpha_global <- .05
 results <- list()
 theme_set(theme_classic())
 if(!exists('DocumentType')){
-  DocumentType <- 0
+  DocumentType <- 2
 }
 ```
 
@@ -69,6 +69,19 @@ source('scripts/distances_calculator.R')
 source('scripts/fragmentation.R')
 database <- fragmentation(distances_calculator(example1))
 ```
+
+```{r tests_functions}
+source('scripts/tests/trends_test.R')
+source('scripts/tests/seasonalities_test.R')
+source('scripts/tests/fragments_comparison_test.R')
+```
+
+```{r interpretations_functions}
+source('scripts/interpretations/trends_interpretations.R')
+source('scripts/interpretations/seasonalities_interpretations.R')
+source('scripts/interpretations/fragments_comparison_interpretations.R')
+```
+
 
 ```{r noref, results='asis'}
 if(DocumentType >= 0){

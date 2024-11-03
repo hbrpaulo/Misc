@@ -5,26 +5,30 @@ graph <- 'none'
 source('scripts/IntervalMainPlot.R')
 ```
 
+**Análise da curva**
+
 ### Tendências
 > A tendência de uma curva é definida com base em seu crescimento/decrescimento em um determinado segmento. Isto é, para esse segmento estabelecido, a tendência indica se a curva cresce, decresce ou permanece estável.
 
 #### **Gráficos**
 
 ```{r trends_tests}
-source('scripts/tests/trends_test.R')
 results$noref$metrics$trends <- trend_test(database, column = 'data_series')
 ```
 
-```{r trends_interpretation, results='asis'}
-source('scripts/interpretations/trends_interpretations.R')
+```{r trends_interpretation_punctual, results='asis'}
+# Plot the trend decomposition using STL (Seasonal-Trend decomposition using Loess)
+plot(
+  stl(ts(database$data_series, frequency = 10), s.window = 'periodic')[["time.series"]][, 2],
+  main = str_wrap('Trend Decomposition', width = 35),  # Title for the plot
+  xlab = 'Observations',  # X-axis label
+  ylab = 'Trend'  # Y-axis label
+)
+
 trends_interpretations(results$noref$metrics$trends)
 ```
 
 ### Sazonalidade
-
-```{r}
-source('scripts/tests/seasonalities_test.R')
-```
 
 >Sazonalidade é a presença de padrões recorrentes nos dados ao longo de intervalos específicos, como dias, semanas ou meses, que se repetem com uma frequência definida. Esses padrões indicam que há algum fator cíclico influenciando a variação dos dados em determinados períodos. Identificar a sazonalidade e suas possíveis frequências em uma série temporal é crucial, pois permite reconhecer essas flutuações regulares e diferenciá-las de outros tipos de variação, como tendências ou ruídos. A análise da frequência dos ciclos sazonais nos ajuda a prever comportamentos futuros e ajustar modelos de acordo com as variações temporais esperadas.
   
@@ -37,15 +41,13 @@ results$noref$metrics$seasonalities <- seasonality_tests(database, column = 'dat
 ```
 <!-- </details>  -->
 
-```{r seasonnalitiesinterpretation, results='asis'}
-source('scripts/interpretations/seasonalities_interpretations.R')
+```{r seasonalities_interpretation_punctual, results='asis'}
 seasonalities_interpretations(results$noref$metrics$seasonalities)
 ```
 
 ### Comparação entre os fragmentos
 
 ```{r}
-source('scripts/tests/fragments_comparison_test.R')
 results$noref$metrics$frag_comparison <- frag_comparison(database, column = 'data_series')
 ```
 
