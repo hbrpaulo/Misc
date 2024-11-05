@@ -1,5 +1,4 @@
-library(DiagrammeR)
-diagram <- mermaid('graph TD
+diagram <- DiagrammeR::mermaid('graph TD
   
     Begin(CurveInterpreter) --> RefDummy(Há referência?)
     RefDummy --> AnInd(Sem<br>referência)
@@ -8,7 +7,11 @@ diagram <- mermaid('graph TD
 
     Ref -->RefPont(Com referência<br>pontual)
     Ref --> RefInt(Com referência<br>intervalar)
-    
+      
+      NoRef --> Summ(Medidas<br>descritivas)
+      RefPont --> Summ1(Medidas<br>descritivas)
+      RefInt --> Summ2(Medidas<br>descritivas)
+      
       NoRef --> Trend(Tendência)
       RefPont --> Trend1(Tendência)
       RefInt --> Trend2(Tendência)
@@ -27,13 +30,8 @@ diagram <- mermaid('graph TD
       RefInt --> Saz2(Sazonalidade)
       
       Saz --> SazG(Sazonalidade<br>global)
-      Saz --> SazF(Sazonalidade<br>frag.)
-      
       Saz1 --> SazG1(Sazonalidade<br>global)
-      Saz1 --> SazF1(Sazonalidade<br>frag.)
-      
       Saz2 --> SazG2(Sazonalidade<br>global)
-      Saz2 --> SazF2(Sazonalidade<br>frag.)
       
       %% Specfics aspects
       
@@ -46,19 +44,16 @@ diagram <- mermaid('graph TD
       TrendG --> Comp[Comparações<br>entre as partes]
       TrendF --> Comp
       SazG --> Comp
-      SazF --> Comp
       
       %%Comparações<br>entre as partes
       
       TrendG1 --> Dist1[Distância entre<br>curva e a referência]
       TrendF1 --> Dist1
       SazG1 --> Dist1
-      SazF1 --> Dist1
 
-      TrendG2 --> Dist2[Distância entre<br>curva e a referência]
+      TrendG2 --> Dist2[Distância entre<br>curva e as bandas<br>do intervalo]
       TrendF2 --> Dist2
-      SazG2 --> Dist2
-      SazF2 --> Dist2     
+      SazG2 --> Dist2    
       Seq_out --> Dist2
       Count_out --> Dist2
       
@@ -79,9 +74,9 @@ diagram <- mermaid('graph TD
     style SazG1 fill:#2BD72F
     style SazG2 fill:#2BD72F
     
-    style SazF fill:#EEA35D
-    style SazF1 fill:#EEA35D
-    style SazF2 fill:#EEA35D
+    style Saz fill:#2BD72F
+    style Saz1 fill:#2BD72F
+    style Saz2 fill:#2BD72F
     
     style TrendG fill:#2BD72F
     style TrendG1 fill:#2BD72F
@@ -95,10 +90,14 @@ diagram <- mermaid('graph TD
     style Trend1 fill:#2BD72F
     style Trend2 fill:#2BD72F
     
-    style Comp fill:#FFFFFF
-    style Comp1 fill:#FFFFFF
-    style Comp2 fill:#FFFFFF
+    style Comp fill:#EEA35D
+    style Comp1 fill:#EEA35D
+    style Comp2 fill:#EEA35D
     
-    style Dist1 fill:#FFFFFF
+    style Dist1 fill:#2BD72F
     style Dist2 fill:#FFFFFF
+    
+    style Summ fill:#EEA35D
+    style Summ1 fill:#EEA35D
+    style Summ2 fill:#EEA35D
 ')

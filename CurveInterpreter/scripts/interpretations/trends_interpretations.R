@@ -1,45 +1,60 @@
-
-
 # Print trend results
 
-cat('### Textos sobre Têndencias: Placeholder\n')
+trends_interpretations <- function(TrendMetrics, alpha = alpha_global) {
+  
+  list2env(TrendMetrics, envir=environment())
 
-results$indicators$trend$global <- paste('Tendência global:',
-                                 if (results$metrics$trend$global$pvalue < alpha) {
-                                   'sim'
-                                 } else {
-                                   'não'
-                                 },
-                                 results$metrics$trend$global$direction)
-
-results$indicators$trend$begin <- paste('Tendência no começo:',
-                                if (results$metrics$trend$begin$pvalue < alpha) {
-                                  'sim'
-                                } else {
-                                  'não'
-                                },
-                                results$metrics$trend$begin$direction)
-
-results$indicators$trend$middle <- paste('Tendência no meio:',
-                                 if (results$metrics$trend$middle$pvalue < alpha) {
-                                   'sim'
-                                 } else {
-                                   'não'
-                                 },
-                                 results$metrics$trend$middle$direction)
-
-results$indicators$trend$end <- paste('Tendência no final:',
-                              if (results$metrics$trend$end$pvalue < alpha) {
-                                'sim'
-                              } else {
-                                'não'
-                              },
-                              results$metrics$trend$end$direction)
-
-cat(results$indicators$trend$global)
-cat('\n\n')
-cat(results$indicators$trend$begin)
-cat('\n\n')
-cat(results$indicators$trend$middle)
-cat('\n\n')
-cat(results$indicators$trend$end)
+  cat("\n\nPara identificar a presença de uma tendência nos dados, utilizamos o teste",
+      "KW-R", "que verifica se os dados apresentam um padrão de crescimento ou declínio ao longo do tempo. Foram analisadas três seções dos dados: tendência global, no início, no meio e no final do período analisado.
+Os resultados são descritos abaixo:")
+  
+  cat("\n\n**Tendência Global:**\n\n")
+  
+  cat("- p-valor: ", format_sig(global$pvalue),
+      "\n- Direção: ", global$direction)
+  
+  cat("\n\nA análise global sugere uma tendência ",
+      global$direction, ", 
+    com um p-valor de ", global$pvalue,
+      ". Isso indica que",
+      ifelse(global$pvalue<alpha, "há", "não há"),
+      "presença de uma tendência significativa ao longo de todo o período.")
+  
+  cat("\n\n**Tendência no Início:**\n\n")
+  
+  cat("- p-valor: ", format_sig(begin$pvalue), 
+      "\n- Direção: ", begin$direction)
+  
+  cat("\n\nNo início do período, os dados apresentam uma tendência ",
+      begin$direction, 
+      " com um p-valor de ",
+      begin$pvalue,
+      ". Este valor sugere que",
+      ifelse(begin$pvalue<alpha, "há", "não há"),
+      "evidência significativa de uma tendência nesta fase inicial.")
+  
+  cat("\n\n**Tendência no Meio:**\n\n")
+  cat("- p-valor: ", format_sig(middle$pvalue), 
+      "\n- Direção: ", middle$direction)
+  
+  cat("\n\nNa seção central, os resultados indicam uma tendência",
+      middle$direction, 
+      "com um p-valor de", 
+      middle$pvalue,
+      ". Esse resultado ",
+      ifelse(middle$pvalue<=alpha, 'aponta', 'não aponta'),
+      " para a presença de uma tendência significativa nesta parte dos dados.")
+  
+  cat("\n\n**Tendência no Final**:\n\n")
+  
+  cat("- p-valor: ", format_sig(end$pvalue),
+      "\n- Direção: ", end$direction)
+  
+  cat("\n\nNo final do período, observamos uma tendência ",
+      end$direction,
+      ", com um p-valor de ",
+      end$pvalue, 
+      ". Esses resultados ",
+      ifelse(end$pvalue<=alpha, 'indicam', 'não indicam'),
+      " uma mudança significativa na tendência nesta fase.")
+}

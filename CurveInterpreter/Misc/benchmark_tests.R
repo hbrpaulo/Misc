@@ -12,10 +12,19 @@ source('scripts/Misc/example_creation.R')
 database <- func(seed = 100, divisor = .2, n = 200);rm(func)
 library(data.table)
 microbenchmark::microbenchmark(
-  tidyv = {database %>% group_by(part) %>% summarise(pvalue = aTSA::trend.test(squared_difference)$p.value)},
+  tidyverse = {database %>% group_by(part) %>% summarise(pvalue = aTSA::trend.test(squared_difference)$p.value)},
   baseR = {aTSA::trend.test(database[which(database$part=='beginning'),]$squared_difference)$p.value
     aTSA::trend.test(database[which(database$part=='middle'),]$squared_difference)$p.value
     aTSA::trend.test(database[which(database$part=='end'),]$squared_difference)$p.value},
   datatable = {data.table(database)[, .(pvalue = aTSA::trend.test(squared_difference)$p.value),
                                    by = .(part)]},
   times = 100) %>% autoplot()
+
+microbenchmark::microbenchmark(
+  tidyverse = {database %>% 
+      group_by(part) %>%
+      summarise(pvalue_shaps = shapiro.test(data_series)$p.value)},
+  sapply = {sapply(unique(database$part),
+          function(x){
+            shapiro.test(database$data_series[database$part==x])})}) %>% 
+  autoplot

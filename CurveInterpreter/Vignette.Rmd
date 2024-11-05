@@ -1,36 +1,51 @@
 ---
-title: "CurveInterpreter v`r 0+round(17/34,2)`"
-
-output:
-  prettydoc::html_pretty:
-    theme: architect
-    highlight: github
-# output: 
-#     html_document:
-#     code_folding: show
+title: "CurveInterpreter v`r 0+round(22/33,2)`"
+# output:
+#   prettydoc::html_pretty:
+#     theme: architect
+#     highlight: github
 #     toc: yes
 #     number_sections: yes
 #     toc_depth: 4
-#     theme: cerulean
+output:
+    html_document:
+    code_folding: show
+    toc: yes
+    number_sections: yes
+    toc_depth: 4
+    theme: cerulean
 date: "`r Sys.Date()`"
 editor_options: 
   chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,
+knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE,
                       message = FALSE,
                       knitr.svg.object = TRUE, 
-                      out.width='40%',
-                      fig.align = 'center')
+                      out.width='50%',
+                      fig.align = 'center'
+                      )
+options(digits = 2)
+set.seed(13796163)
 ```
 
-```{r, echo = FALSE}
+```{r}
+set.seed(13796163)
 library(tidyverse)
 library(DiagrammeR)
-#plot(x)
-alpha <- .5
+library(knitr)
+library(kableExtra)
+library(coda)
+# library(janitor)
+# library(seastests)
+# library(DiagrammeR)
+# library(prettydoc)
+# library(aTSA)
+
+
+alpha_global <- .05
 results <- list()
 theme_set(theme_classic())
 if(!exists('DocumentType')){
@@ -38,8 +53,7 @@ if(!exists('DocumentType')){
 }
 ```
 
-# Análise 
-<!-- {.tabset .tabset-fade .tabset-pills} -->
+# {.tabset .tabset-fade .tabset-pills}
 
 ## Estrutura
 
@@ -48,15 +62,24 @@ source('Misc/diagrama.R')
 diagram
 ```
 
-```{r, echo = FALSE}
+```{r}
+source('https://raw.githubusercontent.com/hbrpaulo/Misc/refs/heads/main/format_sig.R')
 source('Misc/example_creation.R')
 source('scripts/distances_calculator.R')
 source('scripts/fragmentation.R')
+database <- fragmentation(distances_calculator(example1))
 ```
 
+```{r tests_functions}
+source('scripts/tests/trends_test.R')
+source('scripts/tests/seasonalities_test.R')
+source('scripts/tests/fragments_comparison_test.R')
+```
 
-```{r, echo = FALSE}
-database <- fragmentation(distances_calculator(example1))
+```{r interpretations_functions}
+source('scripts/interpretations/trends_interpretations.R')
+source('scripts/interpretations/seasonalities_interpretations.R')
+source('scripts/interpretations/fragments_comparison_interpretations.R')
 ```
 
 
@@ -68,6 +91,7 @@ if(DocumentType >= 0){
 ```
 
 ```{r punctual, results='asis'}
+database <- fragmentation(distances_calculator(example1))
 if(DocumentType >= 1){
   cat(knitr::asis_output(knitr::knit_child("rmd_reference_punctual.Rmd",
                                            quiet=TRUE, envir=environment())))
