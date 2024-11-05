@@ -27,7 +27,7 @@ knitr::opts_chunk$set(echo = FALSE,
                       out.width='50%',
                       fig.align = 'center'
                       )
-options(digits = 2)
+options(digits = 4)
 set.seed(13796163)
 ```
 
