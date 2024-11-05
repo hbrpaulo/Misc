@@ -1,10 +1,75 @@
-## Curva com referência intervalar
+## Curva com referência intervalar {.tabset .tabset-fade .tabset-pills}
 
 ```{r}
 graph <- 'interval'
 source('scripts/IntervalMainPlot.R')
 ```
 
-### Tendências
+```{r}
+# smallest difference betwen the curve and the bounds
+database <- database %>% 
+  mutate(difference_Lbound = data_series - reference_lower_bound,
+         difference_Ubound = reference_upper_bound - data_series,
+         difference_interval = pmin(difference_Lbound, difference_Ubound))
+ggplot(database, aes(x =  1:nrow(database))) +
+  geom_line(aes(y = difference_Lbound, color = 'Lower Bound'), size = 1) +
+  geom_line(aes(y = difference_Ubound, color = 'Upper Bound'), size = 1) +
+  geom_line(aes(y = difference_interval, color = 'Difference'), 
+            size = 1, linetype = 'dashed') +
+  labs(title = 'Curva com referência intervalar', x = 'Data', y = 'Valores') +
+  theme_minimal()
+```
 
-#### Gráficos
+```{r}
+```
+
+**Análise na distância entre a curva e a referência**
+
+### Tendência na distância
+> A tendência de uma curva é definida com base em seu crescimento/decrescimento em um determinado segmento. Isto é, para esse segmento estabelecido, a tendência indica se a curva cresce, decresce ou permanece estável.
+
+#### **Gráficos**
+
+```{r ref_interval_trends_tests}
+results$interval$metrics$trends <- trend_test(database, column = 'difference_interval')
+```
+
+```{r ref_interval_trends_interpretation, results='asis'}
+# Plot the trend decomposition using STL (Seasonal-Trend decomposition using Loess)
+plot(
+  stl(ts(database$difference_interval, frequency = 10), s.window = 'periodic')[["time.series"]][, 2],
+  main = str_wrap('Trend Decomposition', width = 35),  # Title for the plot
+  xlab = 'Observations',  # X-axis label
+  ylab = 'Trend'  # Y-axis label
+)
+trends_interpretations(results$interval$metrics$trends)
+```
+
+### Sazonalidade na distância
+>Sazonalidade é a presença de padrões recorrentes nos dados ao longo de intervalos específicos, como dias, semanas ou meses, que se repetem com uma frequência definida. Esses padrões indicam que há algum fator cíclico influenciando a variação dos dados em determinados períodos. Identificar a sazonalidade e suas possíveis frequências em uma série temporal é crucial, pois permite reconhecer essas flutuações regulares e diferenciá-las de outros tipos de variação, como tendências ou ruídos. A análise da frequência dos ciclos sazonais nos ajuda a prever comportamentos futuros e ajustar modelos de acordo com as variações temporais esperadas.
+  
+#### **Gráficos**
+
+<!-- <details> -->
+<!--   <summary>Click to See</summary> -->
+```{r ref_interval_seasonalities_interpretation, fig.align='default', out.width='50%'}
+results$interval$metrics$seasonalities <- seasonality_tests(database, column = 'difference_ref_data')
+```
+<!-- </details>  -->
+
+```{r seasonnalities_interpretation_interval, results='asis'}
+seasonalities_interpretations(results$interval$metrics$seasonalities)
+```
+
+### Comparação entre os fragmentos
+
+```{r}
+results$interval$metrics$frag_comparison <- frag_comparison(database, column = 'difference_ref_data')
+```
+
+```{r, results='asis'}
+results$interval$metrics$frag_comparison$diff_plot
+lapply(results$interval$metrics$frag_comparison, 
+       FUN = function(x){
+         if(class(x)[1]=='tbl_df'){x %>% kable() %>% kable_styling('striped', full_width = F) %>% column_spec(1, width = '10em')}})
+```

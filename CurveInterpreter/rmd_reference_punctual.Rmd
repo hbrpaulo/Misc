@@ -1,11 +1,6 @@
 ## Curva com referência pontual {.tabset .tabset-fade .tabset-pills}
 
 ```{r}
-database <- fragmentation(distances_calculator(example1))
-```
-
-
-```{r}
 graph <- 'punctual'
 source('scripts/IntervalMainPlot.R')
 ```
@@ -44,7 +39,7 @@ results$punctual$metrics$seasonalities <- seasonality_tests(database, column = '
 ```
 <!-- </details>  -->
 
-```{r seasonnalitiesinterpretation, results='asis'}
+```{r seasonnalities_punctual_interpretation, results='asis'}
 seasonalities_interpretations(results$punctual$metrics$seasonalities)
 ```
 
