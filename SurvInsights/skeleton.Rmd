@@ -1,0 +1,101 @@
+---
+title: 'Tabela descritiva com correlacões e testes entre cada variável e os `tempos de falha`'
+header-includes:
+   - \usepackage[brazil]{babel}
+output:
+  html_document: default
+  #word_document: default
+  #pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.align = 'center', 
+                      out.width = '80%',
+                      echo = FALSE,
+                      background = '0000ff',
+                      message = FALSE,
+                      warning = FALSE,# eval = FALSE,
+                      fig.keep = 'H')
+knitr::opts_knit$set(global.par = TRUE)
+options(
+  knitr.kable.NA = ' ', 
+  format.args = list(decimal.mark = ','))
+
+```
+
+```{r PackagesAndInput}
+library(kableExtra)
+library(tidyverse)
+library(survival)
+
+source('scripts/tab_descr.R')
+```
+
+# . {.tabset}
+
+<!-- Sugestões do do Prof Reinaldo -->
+<!-- 1. Adicionar análise sem censura de tempo médio,etc -->
+<!--    1.1 Adicionar percentual de censura -->
+
+## Tabelas secundárias
+
+### Anatomopatologico
+
+```{r}
+coluna <- column_cat[1]
+aux <- df %>%
+  select(tempos, censura, .y. = coluna)
+```
+
+**Tabela de frequência absoluta e relativa:**
+
+```{r}
+tab_freq(aux) %>% kbl %>% kable_classic
+```
+
+---
+---
+
+**KM de cada nível da variável:**
+
+```{r}
+tab_desc_fac(aux) %>% kbl %>% kable_classic_2
+```
+
+### Diametro final
+
+```{r}
+coluna <- column_cat[2]
+aux <- df_fic %>%
+  select(tempos, censura, .y. = coluna)
+```
+
+**Medidas descritivas da variável:**
+
+```{r, results = 'asis'}
+msdr(df_fic$diametro_final) %>% cat
+```
+
+*Média±DesvioPadrão (Mínimo~Máximo)*
+
+```{r}
+tab_desc(df, 'diametro_final') %>% kbl %>% kable_classic
+```
+
+## Tabela principal
+
+```{r, results='asis'}
+tabelao %>% 
+  kbl('html', digits = 4, escape = FALSE, booktabs = TRUE, 
+      longtable = TRUE, align = 'c', decimal.mark = ',') %>% 
+  kable_classic %>% 
+  row_spec(which(tabelao$coloracao=='J1'), bold = T, color = "black",
+           align = 'c', background = "grey95") %>% 
+  column_spec(ncol(tabelao), color = 'white', background = 'white') %>%
+  scroll_box(height = "1000px") %>% 
+  footnote(general = "Here is a general comments of the table. ",
+           number = c("Footnote 1; ", "Footnote 2; "),
+           alphabet = c("Footnote A; ", "Footnote B; "),
+           symbol = c("Footnote Symbol 1; ", "Footnote Symbol 2")
+  )
+```
