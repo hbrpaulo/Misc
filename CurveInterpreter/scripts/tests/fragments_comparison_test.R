@@ -56,7 +56,7 @@ frag_comparison <- function(database, column, alpha = alpha_global){
                  shapiro.test(
                    database$data_series[database$part == x]
                  )$p.value
-               })) > alpha
+                 })) > alpha
   
   # ---- Statistical Test Selection ----
   #' Tukey's test is relevant if data is normal in all parts.
@@ -70,7 +70,7 @@ frag_comparison <- function(database, column, alpha = alpha_global){
     mutate(test = 'Tukey',
            group1 = str_to_title(group1),
            group2 = str_to_title(group2),
-           p.value = format_sig(p.value))
+           p.value = p.value)
   
   aux$wilconTest <- pairwise.wilcox.test(
     database$data_series,
@@ -79,13 +79,13 @@ frag_comparison <- function(database, column, alpha = alpha_global){
     mutate(test = 'Wilcoxon two-sample test',
            group1 = str_to_title(group1),
            group2 = str_to_title(group2),
-           p.value = format_sig(p.value))
+           p.value = p.value)
   
   # Kolmogorov-Smirnov Test and Geweke Diagnostic ----
   #' Perform Kolmogorov-Smirnov (KS) test and Geweke diagnostic for each pair of
   #'  fragments to analyze differences in distributions.
   
-  ks_pvalue <- numeric() # Vector for KS test p-values
+  ks_p.value <- numeric() # Vector for KS test p-values
   group1 <- character()  # Group 1 names for fragment pairs
   group2 <- character()  # Group 2 names for fragment pairs
   geweke <- numeric()    # Vector for Geweke diagnostic values
@@ -98,7 +98,7 @@ frag_comparison <- function(database, column, alpha = alpha_global){
       frag_j <- database$data_series[database$part == fragments[j]]
       
       # Kolmogorov-Smirnov test
-      ks_pvalue <- c(ks_pvalue, ks.test(frag_i, frag_j)$p.value)
+      ks_p.value <- c(ks_p.value, ks.test(frag_i, frag_j)$p.value)
       
       # Geweke Diagnostic
       varFrag_i <- spectrum0.ar(frag_i)$spec/length(frag_i)
@@ -112,7 +112,7 @@ frag_comparison <- function(database, column, alpha = alpha_global){
   }
   
   # Compile KS and Geweke test results
-  aux$ksTest <- tibble(group1, group2, pvalue = format_sig(ks_pvalue),
+  aux$ksTest <- tibble(group1, group2, p.value = ks_p.value,
                        test = 'Kolmogorov-Smirnov')
   aux$gewekeTest <- tibble(group1, group2, geweke = geweke,
                            test = 'Geweke Diagnostic')
@@ -121,4 +121,4 @@ frag_comparison <- function(database, column, alpha = alpha_global){
 }
 
 # Example usage
-frag_comparison(database, 'data_series')
+# frag_comparison(database, 'data_series')

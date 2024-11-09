@@ -90,12 +90,12 @@ diagram <- DiagrammeR::mermaid('graph TD
     style Trend1 fill:#2BD72F
     style Trend2 fill:#2BD72F
     
-    style Comp fill:#EEA35D
-    style Comp1 fill:#EEA35D
+    style Comp fill:#2BD72F
+    style Comp1 fill:#2BD72F
     style Comp2 fill:#EEA35D
     
     style Dist1 fill:#2BD72F
-    style Dist2 fill:#FFFFFF
+    style Dist2 fill:#EEA35D
     
     style Summ fill:#EEA35D
     style Summ1 fill:#EEA35D

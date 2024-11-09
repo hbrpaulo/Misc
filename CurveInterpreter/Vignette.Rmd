@@ -1,5 +1,5 @@
 ---
-title: "CurveInterpreter v`r 0+round(22/33,2)`"
+title: "CurveInterpreter v`r 0+round((33-7)/33,2)`"
 # output:
 #   prettydoc::html_pretty:
 #     theme: architect
@@ -64,6 +64,8 @@ diagram
 
 ```{r}
 source('https://raw.githubusercontent.com/hbrpaulo/Misc/refs/heads/main/format_sig.R')
+format_sig1 <- format_sig
+format_sig <- Vectorize(format_sig)
 source('Misc/example_creation.R')
 source('scripts/distances_calculator.R')
 source('scripts/fragmentation.R')

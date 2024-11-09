@@ -16,7 +16,7 @@ source('scripts/IntervalMainPlot.R')
 results$noref$metrics$trends <- trend_test(database, column = 'data_series')
 ```
 
-```{r trends_interpretation_punctual, results='asis'}
+```{r trends_interpretation, results='asis'}
 # Plot the trend decomposition using STL (Seasonal-Trend decomposition using Loess)
 plot(
   stl(ts(database$data_series, frequency = 10), s.window = 'periodic')[["time.series"]][, 2],
@@ -41,19 +41,58 @@ results$noref$metrics$seasonalities <- seasonality_tests(database, column = 'dat
 ```
 <!-- </details>  -->
 
-```{r seasonalities_interpretation_punctual, results='asis'}
+```{r seasonalities_interpretation, results='asis'}
 seasonalities_interpretations(results$noref$metrics$seasonalities)
 ```
 
 ### Comparação entre os fragmentos
 
+#### Tukey & Wilcoxon
+
 ```{r}
 results$noref$metrics$frag_comparison <- frag_comparison(database, column = 'data_series')
+
+results$noref$interpretations$frag_comparison <- interpret_frag_comparison(ComparisonMetrics = results$noref$metrics$frag_comparison)
+```
+
+```{r}
+results$noref$metrics$frag_comparison$diff_plot
 ```
 
 ```{r, results='asis'}
-results$noref$metrics$frag_comparison$diff_plot
-lapply(results$noref$metrics$frag_comparison, 
-       FUN = function(x){
-         if(class(x)[1]=='tbl_df'){x %>% kable() %>% kable_styling('striped', full_width = F) %>% column_spec(1, width = '10em')}})
+if(results$noref$metrics$frag_comparison$tukey_usability){
+  results$noref$metrics$frag_comparison$tukeyTest %>% 
+    mutate(p.value = format_sig(p.value)) %>% kable() %>% 
+    kable_styling('striped', full_width = F)
+}else{
+  results$noref$metrics$frag_comparison$wilconTest %>% 
+    mutate(p.value = format_sig(p.value)) %>% kable() %>%
+    kable_styling('striped', full_width = F)
+}
+```
+
+```{r, results='asis'}
+if(results$noref$metrics$frag_comparison$tukey_usability){
+  cat(results$noref$interpretations$frag_comparison$tukey)
+}else{
+  cat(results$noref$interpretations$frag_comparison$wilcoxon)
+}
+```
+
+#### Kolmogorov-Smirnov
+
+```{r, results='asis'}
+results$noref$metrics$frag_comparison$ksTest %>% 
+    mutate(p.value = format_sig(p.value)) %>% kable() %>%
+    kable_styling('striped', full_width = F)
+cat(results$noref$interpretations$frag_comparison$ks)
+```
+
+#### Geweke
+
+```{r, results='asis'}
+results$noref$metrics$frag_comparison$gewekeTest %>% 
+  kable() %>%
+  kable_styling('striped', full_width = F)
+cat(results$noref$interpretations$frag_comparison$geweke)
 ```
