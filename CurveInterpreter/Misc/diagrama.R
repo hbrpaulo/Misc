@@ -29,33 +29,33 @@ diagram <- DiagrammeR::mermaid('graph TD
       RefPont --> Saz1(Sazonalidade)
       RefInt --> Saz2(Sazonalidade)
       
-      Saz --> SazG(Sazonalidade<br>global)
-      Saz1 --> SazG1(Sazonalidade<br>global)
-      Saz2 --> SazG2(Sazonalidade<br>global)
+      %% Saz --> SazG(Sazonalidade<br>global)
+      %% Saz1 --> SazG1(Sazonalidade<br>global)
+      %% Saz2 --> SazG2(Sazonalidade<br>global)
       
       %% Specfics aspects
       
-      RefInt --> Outsiders(Pontos fora<br>do intervalo)
-      Outsiders --> Count_out(Contagem<br>Porcentagem)
-      Outsiders --> Seq_out(Sequenciais)
+      %% RefInt --> Outsiders(Pontos fora<br>do intervalo)
+      %% Outsiders --> Count_out(Contagem<br>Porcentagem)
+      %% Outsiders --> Seq_out(Sequenciais)
 
       %% Comparisons
 
       TrendG --> Comp[Comparações<br>entre as partes]
       TrendF --> Comp
-      SazG --> Comp
+      %% SazG --> Comp
       
       %%Comparações<br>entre as partes
       
       TrendG1 --> Dist1[Distância entre<br>curva e a referência]
       TrendF1 --> Dist1
-      SazG1 --> Dist1
+      %% SazG1 --> Dist1
 
       TrendG2 --> Dist2[Distância entre<br>curva e as bandas<br>do intervalo]
       TrendF2 --> Dist2
-      SazG2 --> Dist2    
-      Seq_out --> Dist2
-      Count_out --> Dist2
+      %% SazG2 --> Dist2    
+      %% Seq_out --> Dist2
+      %% Count_out --> Dist2
       
       Dist1 --> Comp1[Comparações<br>entre as partes]
       Dist2 --> Comp2[Comparações<br>entre as partes]
@@ -70,9 +70,9 @@ diagram <- DiagrammeR::mermaid('graph TD
     style RefPont fill:#2BD72F
     style RefInt fill:#2BD72F
     
-    style SazG fill:#2BD72F
-    style SazG1 fill:#2BD72F
-    style SazG2 fill:#2BD72F
+    %% style SazG fill:#2BD72F
+    %% style SazG1 fill:#2BD72F
+    %% style SazG2 fill:#2BD72F
     
     style Saz fill:#2BD72F
     style Saz1 fill:#2BD72F

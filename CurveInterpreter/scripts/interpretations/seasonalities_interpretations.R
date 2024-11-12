@@ -82,5 +82,11 @@ seasonalities_interpretations <- function(SeasonMetrics, alpha = alpha_global){
     for(i in Saz_No){
       cat(i);cat('\n')}
   }
-  
+  cat('\n\nLembrando que a existência de uma sazonalidade de',
+      season_possibilities_all$freq[1], 
+      'implica que a cada',
+      season_possibilities_all$freq[1], 
+      'observações, os padrões apresentados no período anterior tendem a serem repetidos.',
+      'Esses padrões indicam que há algum fator cíclico influenciando a variação dos dados em determinados períodos')
+  # Sazonalidade é a presença de padrões recorrentes nos dados ao longo de intervalos específicos, como dias, semanas ou meses, que se repetem com uma frequência definida. Esses padrões indicam que há algum fator cíclico influenciando a variação dos dados em determinados períodos. Identificar a sazonalidade e suas possíveis frequências é crucial, pois permite reconhecer essas flutuações regulares e diferenciá-las de outros tipos de variação, como tendências ou ruídos. A análise da frequência dos ciclos sazonais nos ajuda a prever comportamentos posteriores e ajustar modelos de acordo com as variações esperadas.
 }

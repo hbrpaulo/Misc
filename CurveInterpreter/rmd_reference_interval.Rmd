@@ -11,19 +11,21 @@ database <- database %>%
   mutate(difference_Lbound = data_series - reference_lower_bound,
          difference_Ubound = reference_upper_bound - data_series,
          difference_interval = pmin(difference_Lbound, difference_Ubound))
-ggplot(database, aes(x =  1:nrow(database))) +
-  geom_line(aes(y = difference_Lbound, color = 'Lower Bound'), size = 1) +
-  geom_line(aes(y = difference_Ubound, color = 'Upper Bound'), size = 1) +
-  geom_line(aes(y = difference_interval, color = 'Difference'), 
-            size = 1, linetype = 'dashed') +
-  labs(title = 'Curva com referência intervalar', x = 'Data', y = 'Valores') +
-  theme_minimal()
+# ggplot(database, aes(x =  1:nrow(database))) +
+#   geom_line(aes(y = difference_Lbound, color = 'Lower Bound'), size = 1) +
+#   geom_line(aes(y = difference_Ubound, color = 'Upper Bound'), size = 1) +
+#   geom_line(aes(y = difference_interval, color = 'Difference'), 
+#             size = 1, linetype = 'dashed') +
+#   labs(title = 'Curva com referência intervalar', x = 'Data', y = 'Valores') +
+#   theme_minimal()
 ```
 
 **Análise na distância entre a curva e a referência**
 
 ### Tendência na distância
+<details>
 > A tendência de uma curva é definida com base em seu crescimento/decrescimento em um determinado segmento. Isto é, para esse segmento estabelecido, a tendência indica se a curva cresce, decresce ou permanece estável.
+</details>
 
 #### **Gráficos**
 
@@ -43,8 +45,10 @@ trends_interpretations(results$interval$metrics$trends)
 ```
 
 ### Sazonalidade na distância
->Sazonalidade é a presença de padrões recorrentes nos dados ao longo de intervalos específicos, como dias, semanas ou meses, que se repetem com uma frequência definida. Esses padrões indicam que há algum fator cíclico influenciando a variação dos dados em determinados períodos. Identificar a sazonalidade e suas possíveis frequências em uma série temporal é crucial, pois permite reconhecer essas flutuações regulares e diferenciá-las de outros tipos de variação, como tendências ou ruídos. A análise da frequência dos ciclos sazonais nos ajuda a prever comportamentos futuros e ajustar modelos de acordo com as variações temporais esperadas.
-  
+<details>
+>Sazonalidade é a presença de padrões recorrentes nos dados ao longo de intervalos específicos, como dias, semanas ou meses, que se repetem com uma frequência definida. Esses padrões indicam que há algum fator cíclico influenciando a variação dos dados em determinados períodos. Identificar a sazonalidade e suas possíveis frequências é crucial, pois permite reconhecer essas flutuações regulares e diferenciá-las de outros tipos de variação, como tendências ou ruídos. A análise da frequência dos ciclos sazonais nos ajuda a prever comportamentos posteriores e ajustar modelos de acordo com as variações esperadas.
+</details> 
+
 #### **Gráficos**
 
 <!-- <details> -->

@@ -8,7 +8,9 @@ source('scripts/IntervalMainPlot.R')
 **Análise na distância entre a curva e a referência**
 
 ### Tendência na distância
+<details>
 > A tendência de uma curva é definida com base em seu crescimento/decrescimento em um determinado segmento. Isto é, para esse segmento estabelecido, a tendência indica se a curva cresce, decresce ou permanece estável.
+</details>
 
 #### **Gráficos**
 
@@ -28,8 +30,10 @@ trends_interpretations(results$punctual$metrics$trends)
 ```
 
 ### Sazonalidade na distância
->Sazonalidade é a presença de padrões recorrentes nos dados ao longo de intervalos específicos, como dias, semanas ou meses, que se repetem com uma frequência definida. Esses padrões indicam que há algum fator cíclico influenciando a variação dos dados em determinados períodos. Identificar a sazonalidade e suas possíveis frequências em uma série temporal é crucial, pois permite reconhecer essas flutuações regulares e diferenciá-las de outros tipos de variação, como tendências ou ruídos. A análise da frequência dos ciclos sazonais nos ajuda a prever comportamentos futuros e ajustar modelos de acordo com as variações temporais esperadas.
-  
+<details>
+>Sazonalidade é a presença de padrões recorrentes nos dados ao longo de intervalos específicos, como dias, semanas ou meses, que se repetem com uma frequência definida. Esses padrões indicam que há algum fator cíclico influenciando a variação dos dados em determinados períodos. Identificar a sazonalidade e suas possíveis frequências é crucial, pois permite reconhecer essas flutuações regulares e diferenciá-las de outros tipos de variação, como tendências ou ruídos. A análise da frequência dos ciclos sazonais nos ajuda a prever comportamentos posteriores e ajustar modelos de acordo com as variações esperadas.
+</details> 
+
 #### **Gráficos**
 
 <!-- <details> -->
