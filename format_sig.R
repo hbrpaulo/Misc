@@ -15,7 +15,7 @@
 #' format_sig(0.03)          # Example with p-value 0.03; returns "0.03*"
 #' format_sig(0.0005, 4)     # Example with 4 decimal places and significance; returns "0.0005***"
 
-format_sig <- function(x, k = 3, thresholds = c(0.001, 0.05, 0.1), stars = c("***", "**", "*")) {
+format_sig <- function(x, k = 3, thresholds = c(0.001, 0.05, 0.1), stars = c("***", "**", "*", "")) {
   
   #' Checks if the value is negative and displays a message
   if(x<0)message('Negative values should not be used in this function')
@@ -29,3 +29,5 @@ format_sig <- function(x, k = 3, thresholds = c(0.001, 0.05, 0.1), stars = c("**
   
   return(paste0(x, star))
 }
+
+#Vectorize(format_sig)(1/10^(0:3))

@@ -46,17 +46,17 @@ frag_comparison <- function(database, column, alpha = alpha_global){
     theme(legend.position = 'none')
   
   # Normality Test for Each Part ----
-  #' Perform Shapiro-Wilk test on each fragment to determine if the data are
+  #' Perform Anderson-Darling test on each fragment to determine if the data are
   #' normally distributed.
-  #' If all fragments are normally distributed (p > alpha), Tukey's test is used.
+  #' If all fragments are normally distributed (p < alpha), Tukey's test is used.
   #' Otherwise, the Wilcoxon test is chosen as a non-parametric alternative.
   aux$tukey_usability <- 
     min(sapply(fragments,
                function(x){
-                 shapiro.test(
+                 ad.test(
                    database$data_series[database$part == x]
                  )$p.value
-                 })) > alpha
+                 })) < alpha
   
   # ---- Statistical Test Selection ----
   #' Tukey's test is relevant if data is normal in all parts.

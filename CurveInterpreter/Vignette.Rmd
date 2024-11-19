@@ -38,6 +38,7 @@ library(DiagrammeR)
 library(knitr)
 library(kableExtra)
 library(coda)
+library(nortest)
 # library(janitor)
 # library(seastests)
 # library(DiagrammeR)
@@ -69,7 +70,25 @@ format_sig <- Vectorize(format_sig)
 source('Misc/example_creation.R')
 source('scripts/distances_calculator.R')
 source('scripts/fragmentation.R')
-database <- fragmentation(distances_calculator(example1))
+# database <- fragmentation(distances_calculator(example1))
+dff <- arrow::read_parquet('https://github.com/petrobras/3W/raw/refs/heads/main/dataset/0/WELL-00001_20170201010207.parquet') %>% 
+  janitor::clean_names() %>% 
+  rename('data_series' = t_jus_ckp) %>% select(data_series)
+```
+
+
+```{r}
+janela <- 6001
+w3 <- tibble(data_series = zoo::rollmean(dff$data_series, janela),
+             reference_values = zoo::rollmedian(dff$data_series, janela),
+             sd1 = zoo::rollapply(dff$data_series, width = janela, FUN = sd),
+             reference_upper_bound = reference_values + sd1/2,
+             reference_lower_bound = reference_values - sd1/2
+)
+```
+
+```{r}
+database <- fragmentation(distances_calculator(w3))
 ```
 
 ```{r tests_functions}
@@ -93,7 +112,8 @@ if(DocumentType >= 0){
 ```
 
 ```{r punctual, results='asis'}
-database <- fragmentation(distances_calculator(example1))
+# database <- fragmentation(distances_calculator(example1))
+database <- fragmentation(distances_calculator(w3))
 if(DocumentType >= 1){
   cat(knitr::asis_output(knitr::knit_child("rmd_reference_punctual.Rmd",
                                            quiet=TRUE, envir=environment())))

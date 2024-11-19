@@ -3,8 +3,8 @@ p <- ggplot(data = database, aes(x = 1:nrow(database), y = data_series)) +
   geom_vline(xintercept = attr(database, 'beginning'), linetype = 'dashed') +
   geom_vline(xintercept = attr(database, 'end'), linetype = 'dashed') +
   labs(title = 'Curve divided in beginning|middle|end',
-       x = 'Values',
-       y = 'Obs.')
+       y = 'Values',
+       x = 'Obs.')
 
 p <- switch(graph,
             'none' = {p +

@@ -32,7 +32,12 @@ variance_between_cycles <- function(x, freq) {
 seasonality_finder <- function(data = database, 
                                n_min = 7, n_centers = 2){
   # n_min: Minimum number of elements in each cycle to consider
-  
+  if(nrow(data)>500){
+    data <- tibble(nrow_gr_10000 = 1:nrow(data),
+           data) %>% sample_n(500) %>% 
+      arrange(nrow_gr_10000) %>% 
+      select(-nrow_gr_10000)
+  }
   # Create a data frame to store frequencies and their corresponding variances
   aux <- tibble(
     freq = n_min:(length(data$data_series) / 3),
