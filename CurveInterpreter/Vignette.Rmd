@@ -43,7 +43,7 @@ library(nortest)
 # library(seastests)
 # library(DiagrammeR)
 # library(prettydoc)
-# library(aTSA)
+library(aTSA)
 
 
 alpha_global <- .05
@@ -70,14 +70,17 @@ format_sig <- Vectorize(format_sig)
 source('Misc/example_creation.R')
 source('scripts/distances_calculator.R')
 source('scripts/fragmentation.R')
-# database <- fragmentation(distances_calculator(example1))
+
+column <- 't_jus_ckp'
 dff <- arrow::read_parquet('https://github.com/petrobras/3W/raw/refs/heads/main/dataset/0/WELL-00001_20170201010207.parquet') %>% 
   janitor::clean_names() %>% 
-  rename('data_series' = t_jus_ckp) %>% select(data_series)
+  rename('data_series' = column) %>%
+  select(data_series)
 ```
 
 
 ```{r}
+# Reduction of data size and creation of a fictional interval
 janela <- 6001
 w3 <- tibble(data_series = zoo::rollmean(dff$data_series, janela),
              reference_values = zoo::rollmedian(dff$data_series, janela),
@@ -103,13 +106,118 @@ source('scripts/interpretations/seasonalities_interpretations.R')
 source('scripts/interpretations/fragments_comparison_interpretations.R')
 ```
 
+<!-- NoRef subs -->
+## Curva sem referência {.tabset .tabset-fade .tabset-pills}
 
-```{r noref, results='asis'}
-if(DocumentType >= 0){
-  cat(knitr::asis_output(knitr::knit_child("rmd_noref.Rmd", 
-                                           quiet=TRUE, envir=environment())))
+```{r}
+graph <- 'none'
+source('scripts/IntervalMainPlot.R')
+```
+
+**Análise da curva**
+
+### Tendências
+<details>
+> A tendência de uma curva é definida com base em seu crescimento/decrescimento em um determinado segmento. Isto é, para esse segmento estabelecido, a tendência indica se a curva cresce, decresce ou permanece estável.
+</details>
+
+#### **Gráficos**
+
+```{r trends_tests}
+results$noref$metrics$trends <- trend_test(database, column = 'data_series')
+```
+
+```{r trends_stl, results='asis'}
+# Plot the trend decomposition using STL (Seasonal-Trend decomposition using Loess)
+plot(
+  stl(ts(database$data_series, frequency = 10), s.window = 'periodic')[["time.series"]][, 2],
+  main = str_wrap('Trend Decomposition', width = 35),  # Title for the plot
+  xlab = 'Observations',  # X-axis label
+  ylab = 'Trend'  # Y-axis label
+)
+```
+
+
+```{r trends_interpretation, results='asis'}
+trends_interpretations(results$noref$metrics$trends)
+```
+
+### Sazonalidade
+<details>
+>Sazonalidade é a presença de padrões recorrentes nos dados ao longo de intervalos específicos, como dias, semanas ou meses, que se repetem com uma frequência definida. Esses padrões indicam que há algum fator cíclico influenciando a variação dos dados em determinados períodos. Identificar a sazonalidade e suas possíveis frequências é crucial, pois permite reconhecer essas flutuações regulares e diferenciá-las de outros tipos de variação, como tendências ou ruídos. A análise da frequência dos ciclos sazonais nos ajuda a prever comportamentos posteriores e ajustar modelos de acordo com as variações esperadas.
+</details>
+
+#### **Gráficos**
+
+<!-- <details> -->
+<!--   <summary>Click to See</summary> -->
+```{r noref_seasonalities_teste, fig.align='default', out.width='50%'}
+results$noref$metrics$seasonalities <- seasonality_tests(database, column = 'data_series')
+```
+<!-- </details>  -->
+
+```{r noref_seasonalities_interpretation, results='asis'}
+seasonalities_interpretations(results$noref$metrics$seasonalities)
+```
+
+### Comparação entre os fragmentos
+
+#### Tukey & Wilcoxon
+
+```{r}
+results$noref$metrics$frag_comparison <- frag_comparison(database, column = 'data_series')
+
+results$noref$interpretations$frag_comparison <- interpret_frag_comparison(ComparisonMetrics = results$noref$metrics$frag_comparison)
+```
+
+```{r}
+results$noref$metrics$frag_comparison$diff_plot
+```
+
+```{r, results='asis'}
+if(results$noref$metrics$frag_comparison$tukey_usability){
+  results$noref$metrics$frag_comparison$tukeyTest %>%
+    mutate(p.value = format_sig(p.value)) %>% kable() %>%
+    kable_styling('striped', full_width = F)
+}else{
+  results$noref$metrics$frag_comparison$wilconTest %>%
+    mutate(p.value = format_sig(p.value)) %>% kable() %>%
+    kable_styling('striped', full_width = F)
 }
 ```
+
+```{r, results='asis'}
+if(results$noref$metrics$frag_comparison$tukey_usability){
+  cat(results$noref$interpretations$frag_comparison$tukey)
+}else{
+  cat(results$noref$interpretations$frag_comparison$wilcoxon)
+}
+```
+
+#### Kolmogorov-Smirnov
+
+```{r, results='asis'}
+results$noref$metrics$frag_comparison$ksTest %>%
+    mutate(p.value = format_sig(p.value)) %>% kable() %>%
+    kable_styling('striped', full_width = F)
+cat(results$noref$interpretations$frag_comparison$ks)
+```
+
+#### Geweke
+
+```{r, results='asis'}
+results$noref$metrics$frag_comparison$gewekeTest %>%
+  kable() %>%
+  kable_styling('striped', full_width = F)
+cat(results$noref$interpretations$frag_comparison$geweke)
+```
+
+<!-- ```{r noref, results='asis'} -->
+<!-- if(DocumentType >= 0){ -->
+<!--   cat(knitr::asis_output(knitr::knit_child("rmd_noref.Rmd",  -->
+<!--                                            quiet=TRUE, envir=environment()))) -->
+<!-- } -->
+<!-- ``` -->
 
 ```{r punctual, results='asis'}
 # database <- fragmentation(distances_calculator(example1))

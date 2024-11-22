@@ -22,10 +22,8 @@ seasonalities_interpretations <- function(SeasonMetrics, alpha = alpha_global){
   
   # Plot the p-values of the seasonality test for each frequency
   plot(
-    x = 7:(length(database$data_series) / 3),
-    y = sapply(7:(length(
-      database$data_series
-    ) / 3),
+    x = freq_aux,
+    y = sapply(freq_aux,
     function(f) {
       seastests::kw(ts(database$data_series,
                        frequency = f), freq = f)$Pval

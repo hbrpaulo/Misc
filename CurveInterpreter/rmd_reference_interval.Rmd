@@ -33,7 +33,7 @@ database <- database %>%
 results$interval$metrics$trends <- trend_test(database, column = 'difference_interval')
 ```
 
-```{r ref_interval_trends_interpretation, results='asis'}
+```{r ref_interval_stl, results='asis'}
 # Plot the trend decomposition using STL (Seasonal-Trend decomposition using Loess)
 plot(
   stl(ts(database$difference_interval, frequency = 10), s.window = 'periodic')[["time.series"]][, 2],
@@ -41,6 +41,10 @@ plot(
   xlab = 'Observations',  # X-axis label
   ylab = 'Trend'  # Y-axis label
 )
+```
+
+
+```{r ref_interval_trends_interpretation, results='asis'}
 trends_interpretations(results$interval$metrics$trends)
 ```
 

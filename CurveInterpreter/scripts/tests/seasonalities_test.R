@@ -31,37 +31,54 @@ variance_between_cycles <- function(x, freq) {
 
 seasonality_finder <- function(data = database, 
                                n_min = 7, n_centers = 2){
+  
+  aux <- list()
+  freq_aux <- n_min:(length(data$data_series) / 3)
+  # In case the data is big
   # n_min: Minimum number of elements in each cycle to consider
   if(nrow(data)>500){
-    data <- tibble(nrow_gr_10000 = 1:nrow(data),
-           data) %>% sample_n(500) %>% 
-      arrange(nrow_gr_10000) %>% 
-      select(-nrow_gr_10000)
-  }
-  # Create a data frame to store frequencies and their corresponding variances
-  aux <- tibble(
-    freq = n_min:(length(data$data_series) / 3),
-    # Frequency range
-    vars = sapply(
-      n_min:(length(data$data_series) / 3),
-      FUN = function(f) {
-        # Calculate variance for each frequency
-        variance_between_cycles(data$data_series, freq = f)
-      }
+    freq_aux <- freq_aux[pracma::isprime(freq_aux)==1]
+    aux$table <- tibble(
+      freq = freq_aux[pracma::isprime(freq_aux)==1],
+      # Frequency range
+      vars = sapply(
+        freq_aux,
+        FUN = function(f) {
+          # Calculate variance for each frequency
+          variance_between_cycles(data$data_series, freq = f)
+        }
+      )
     )
-  )
+    # Apply k-means clustering to group frequencies based on variance
+    divide_groups <- kmeans(aux$table$vars, centers = n_centers)
+    aux$table$group <- divide_groups$cluster
+  }else{
+    # Create a data frame to store frequencies and their corresponding variances
+    aux$table <- tibble(
+      freq = n_min:(length(data$data_series) / 3),
+      # Frequency range
+      vars = sapply(
+        n_min:(length(data$data_series) / 3),
+        FUN = function(f) {
+          # Calculate variance for each frequency
+          variance_between_cycles(data$data_series, freq = f)
+        }
+      )
+    )
   
   # Apply k-means clustering to group frequencies based on variance
-  divide_groups <- kmeans(aux$vars, centers = n_centers)
-  aux$group <- divide_groups$cluster
+  divide_groups <- kmeans(aux$table$vars, centers = n_centers)
+  aux$table$group <- divide_groups$cluster
   
+  }
+  aux$freq_aux <- freq_aux
   return(aux)
 }
 
 seasonality_tests <- function(database, column, alpha = alpha_global){
-  aux <- list()
   
-  season_possibilities_all <- seasonality_finder()
+  aux <- seasonality_finder()
+  season_possibilities_all <- aux$table
   
   # Identify the group with the lowest variance
   season_possibilities <- season_possibilities_all %>% 

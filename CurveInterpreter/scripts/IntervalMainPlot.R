@@ -2,7 +2,7 @@ p <- ggplot(data = database, aes(x = 1:nrow(database), y = data_series)) +
   geom_line() + 
   geom_vline(xintercept = attr(database, 'beginning'), linetype = 'dashed') +
   geom_vline(xintercept = attr(database, 'end'), linetype = 'dashed') +
-  labs(title = 'Curve divided in beginning|middle|end',
+  labs(title = paste(str_to_title(column), 'divided in beginning|middle|end'),
        y = 'Values',
        x = 'Obs.')
 

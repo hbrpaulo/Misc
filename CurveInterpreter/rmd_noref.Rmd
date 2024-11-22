@@ -17,7 +17,7 @@ source('scripts/IntervalMainPlot.R')
 results$noref$metrics$trends <- trend_test(database, column = 'data_series')
 ```
 
-```{r trends_interpretation, results='asis'}
+```{r trends_stl, results='asis'}
 # Plot the trend decomposition using STL (Seasonal-Trend decomposition using Loess)
 plot(
   stl(ts(database$data_series, frequency = 10), s.window = 'periodic')[["time.series"]][, 2],
@@ -25,7 +25,10 @@ plot(
   xlab = 'Observations',  # X-axis label
   ylab = 'Trend'  # Y-axis label
 )
+```
 
+
+```{r trends_interpretation, results='asis'}
 trends_interpretations(results$noref$metrics$trends)
 ```
 
