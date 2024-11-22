@@ -51,7 +51,7 @@ frag_comparison <- function(database, column, alpha = alpha_global){
   #' If all fragments are normally distributed (p < alpha), Tukey's test is used.
   #' Otherwise, the Wilcoxon test is chosen as a non-parametric alternative.
   aux$tukey_usability <- 
-    min(sapply(fragments,
+    max(sapply(fragments,
                function(x){
                  ad.test(
                    database$data_series[database$part == x]
