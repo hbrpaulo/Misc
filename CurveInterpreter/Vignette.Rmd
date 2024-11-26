@@ -80,7 +80,7 @@ dff <- arrow::read_parquet('https://github.com/petrobras/3W/raw/refs/heads/main/
 
 ```{r}
 # Reduction of data size and creation of a fictional interval
-janela <- 6001
+janela <- 1001
 w3 <- tibble(data_series = zoo::rollmean(dff$data_series, janela),
              reference_values = zoo::rollmedian(dff$data_series, janela),
              sd1 = zoo::rollapply(dff$data_series, width = janela, FUN = sd),
@@ -104,6 +104,9 @@ source('scripts/interpretations/trends_interpretations.R')
 source('scripts/interpretations/seasonalities_interpretations.R')
 source('scripts/interpretations/fragments_comparison_interpretations.R')
 ```
+
+<!-- add markov switching -->
+<!-- transcicao suave ou brusca -->
 
 ```{r noref, results='asis'}
 if(DocumentType >= 0){
