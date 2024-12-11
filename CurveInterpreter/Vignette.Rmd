@@ -72,6 +72,7 @@ source('scripts/distances_calculator.R')
 source('scripts/fragmentation.R')
 
 column <- 't_jus_ckp'
+
 dff <- arrow::read_parquet('https://github.com/petrobras/3W/raw/refs/heads/main/dataset/0/WELL-00001_20170201010207.parquet') %>% 
   janitor::clean_names() %>% 
   rename('data_series' = column) %>%
@@ -130,3 +131,7 @@ if(DocumentType == 2){
                                            quiet=TRUE, envir=environment())))
 }
 ```
+
+
+<!-- sintetizar n grande para conter apequenamento dos valores de p -->
+<!-- corpotamento parabolico e constantes-->
