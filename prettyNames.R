@@ -46,16 +46,16 @@ recover_original_name <- function(standardized_name, mapping) {
 }
 
 # Criar o data frame original
-dff <- tibble(
-  `Oiwna~ç aofn` = 1,
-  `d uifuv` = 2, `i ugo il` = 3,
-  `uigy yugk` = 4, `pui vyk ol` = 5,
-  `oub n` = 6, `co nl` = 7
-)
+#dff <- tibble(
+#  `Oiwna~ç aofn` = 1,
+#  `d uifuv` = 2, `i ugo il` = 3,
+#  `uigy yugk` = 4, `pui vyk ol` = 5,
+#  `oub n` = 6, `co nl` = 7
+#)
 
 # Padronizar os nomes das colunas
-mapping_names <- standardize_column_names(dff)
+#mapping_names <- standardize_column_names(dff)
 
 # Recuperar o nome original a partir do padronizado
-recover_original_name('oiwna_c_aofn', mapping_names)
+#recover_original_name('oiwna_c_aofn', mapping_names)
 
