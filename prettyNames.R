@@ -32,7 +32,7 @@ standardize_column_names <- function(df) {
 #' @examples
 #' mapping_names <- standardize_column_names(dff)
 #' recover_original_name('oiwna_c_aofn', mapping_names)
-recover_original_name <- function(standardized_name, mapping) {
+recover_original_name <- function(standardized_name, mapping = mapping_names) {
   if (!"modified" %in% colnames(mapping) || !"original" %in% colnames(mapping)) {
     stop("Invalid mapping. Ensure the mapping was created by 'standardize_column_names'.")
   }
