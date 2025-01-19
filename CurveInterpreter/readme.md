@@ -21,4 +21,3 @@ Encorajamos contribuições! Se você tem sugestões de melhorias, novas funcion
 - **Contribuições**: 
 - **Licença**: free source
 - **Autores e Agradecimentos**: Paulo H. B. Ribeiro
-- **Agradecimentos**: Prof Dr Oilson Gonzatto
