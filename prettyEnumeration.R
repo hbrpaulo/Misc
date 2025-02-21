@@ -19,25 +19,25 @@
 #' }
 #'
 #' @examples
-# When x has multiple elements:
-nums <- c(1, 5, 43, 74)
-prettyEnumeration(nums)
-# [1] "1, 5, 43 e 74"
-
-# When x has exactly two elements:
-two_vals <- c("abacaxi", "banana")
-prettyEnumeration(two_vals)
-# [1] "maçã e banana"
-
-# When x has a single element:
-single_val <- "kiwi"
-prettyEnumeration(single_val)
-# [1] "kiwi"
-
-# When x is empty:
-empty_vals <- character(0)
-prettyEnumeration(empty_vals)
-# [1] ""
+#' # When x has multiple elements:
+#' nums <- c(1, 5, 43, 74)
+#' prettyEnumeration(nums)
+#' # [1] "1, 5, 43 e 74"
+#' 
+#' # When x has exactly two elements:
+#' two_vals <- c("abacaxi", "banana")
+#' prettyEnumeration(two_vals)
+#' # [1] "maçã e banana"
+#' 
+#' # When x has a single element:
+#' single_val <- "kiwi"
+#' prettyEnumeration(single_val)
+#' # [1] "kiwi"
+#' 
+#' # When x is empty:
+#' empty_vals <- character(0)
+#' prettyEnumeration(empty_vals)
+#' # [1] ""
 
 prettyEnumeration <- function(x, language_add = " e ") {
   x <- as.character(x)  # Ensure we work with character data
