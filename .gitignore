@@ -1,7 +1,7 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
 finance_app/.Rhistory
 CurveInterpreter/.RData
 CurveInterpreter/.Rhistory
