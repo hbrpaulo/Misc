@@ -13,11 +13,11 @@ O projeto atualmente suporta a análise de três tipos principais de curvas:
 2. **Curvas com Referência Intervalar**: Curvas que são analisadas dentro de um envelope de resíduos estatísticos, permitindo uma avaliação em relação a uma faixa de variação aceitável.
 3. **Curvas Sem Referencial**: Análise de curvas que não possuem um referencial externo, focando na interpretação de suas características intrínsecas.
 
-Encorajamos contribuições! Se você tem sugestões de melhorias, novas funcionalidades ou quer corrigir bugs, sinta-se à vontade para abrir uma pull request ou issue.
+Se você tem sugestões de melhorias, novas funcionalidades ou quer corrigir bugs, sinta-se à vontade para abrir uma pull request ou issue.
 
 ---
 
-- **Descrição do Projeto**: Uma introdução clara sobre o que é o projeto e para que serve.
+- **Descrição do Projeto**: .
 - **Contribuições**: 
 - **Licença**: free source
 - **Autores e Agradecimentos**: Paulo H. B. Ribeiro
