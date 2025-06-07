@@ -1,3 +1,6 @@
+path_one <- stringr::str_split(rstudioapi::getActiveDocumentContext()$path, '/', simplify = TRUE)
+setwd(paste0(path_one[-length(path_one)], collapse = '/'))
+
 # Usando a função askYesNo para escolher qual tipo de documento será gerado
 # análogo a utilização de shiny
 
@@ -14,4 +17,3 @@ if(!exists('DocumentType')){
 }
 
 rmarkdown::render('Vignette.Rmd')
-
